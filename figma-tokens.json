@@ -1,0 +1,192 @@
+{
+  "$themes": [],
+  "$metadata": {
+    "tokenSetOrder": ["totaluptime"]
+  },
+  "totaluptime": {
+    "color": {
+      "brand": {
+        "cyan":   { "value": "#01ADEF", "type": "color", "description": "Primary brand colour — Edgenexus electric cyan" },
+        "cyan-2": { "value": "#0192C7", "type": "color", "description": "Cyan hover / pressed" },
+        "blue":   { "value": "#144586", "type": "color", "description": "Display headings + deep accents" },
+        "blue-9": { "value": "#0E2F5C", "type": "color", "description": "Darkest brand surface (modal backdrops, footer base)" },
+        "mint":   { "value": "#5CC4A8", "type": "color", "description": "Supporting / success / category chip" },
+        "coral":  { "value": "#ff5a6e", "type": "color", "description": "Warm accent — primary acquisition CTA" },
+        "coral-2":{ "value": "#e63f55", "type": "color", "description": "Coral hover / pressed" }
+      },
+      "surface": {
+        "white":     { "value": "#FFFFFF", "type": "color" },
+        "sky":       { "value": "#DFEAF2", "type": "color", "description": "Section background tint" },
+        "sky-soft":  { "value": "#F2F7FB", "type": "color", "description": "Subtle hover / utility row background" },
+        "line":      { "value": "#E4ECF3", "type": "color", "description": "Hairline borders & dividers" }
+      },
+      "text": {
+        "ink":     { "value": "#202020", "type": "color", "description": "Primary body text" },
+        "ink-2":   { "value": "#4A5562", "type": "color", "description": "Secondary / muted text" },
+        "on-cyan": { "value": "#FFFFFF", "type": "color" },
+        "on-blue": { "value": "#FFFFFF", "type": "color" }
+      },
+      "category": {
+        "delivery": { "value": "{color.brand.cyan}",  "type": "color", "description": "Application delivery group" },
+        "dns":      { "value": "{color.brand.mint}",  "type": "color", "description": "DNS services group" },
+        "security": { "value": "{color.brand.coral}", "type": "color", "description": "Network & security group" },
+        "company":  { "value": "{color.brand.blue}",  "type": "color", "description": "Company / Resources groups" }
+      }
+    },
+    "fontFamily": {
+      "sans": { "value": "Montserrat", "type": "fontFamilies" }
+    },
+    "fontWeight": {
+      "regular":  { "value": 400, "type": "fontWeights" },
+      "medium":   { "value": 500, "type": "fontWeights" },
+      "semibold": { "value": 600, "type": "fontWeights" },
+      "bold":     { "value": 700, "type": "fontWeights" },
+      "extra":    { "value": 800, "type": "fontWeights" }
+    },
+    "fontSize": {
+      "xs":   { "value": "11px", "type": "fontSizes" },
+      "sm":   { "value": "13px", "type": "fontSizes" },
+      "base": { "value": "15px", "type": "fontSizes" },
+      "lg":   { "value": "17px", "type": "fontSizes" },
+      "xl":   { "value": "20px", "type": "fontSizes" },
+      "2xl":  { "value": "24px", "type": "fontSizes" },
+      "3xl":  { "value": "30px", "type": "fontSizes" },
+      "4xl":  { "value": "36px", "type": "fontSizes" },
+      "5xl":  { "value": "48px", "type": "fontSizes" },
+      "6xl":  { "value": "60px", "type": "fontSizes" }
+    },
+    "lineHeights": {
+      "display": { "value": "1.05", "type": "lineHeights" },
+      "tight":   { "value": "1.1",  "type": "lineHeights" },
+      "normal":  { "value": "1.35", "type": "lineHeights" },
+      "relaxed": { "value": "1.6",  "type": "lineHeights" }
+    },
+    "letterSpacing": {
+      "display": { "value": "-1.5%", "type": "letterSpacing" },
+      "normal":  { "value": "0",     "type": "letterSpacing" },
+      "eyebrow": { "value": "12%",   "type": "letterSpacing" }
+    },
+    "typography": {
+      "display-xl": {
+        "value": {
+          "fontFamily":   "{fontFamily.sans}",
+          "fontWeight":   "{fontWeight.extra}",
+          "fontSize":     "{fontSize.6xl}",
+          "lineHeight":   "{lineHeights.display}",
+          "letterSpacing":"{letterSpacing.display}"
+        },
+        "type": "typography",
+        "description": "Hero H1 on desktop"
+      },
+      "display-lg": {
+        "value": {
+          "fontFamily":   "{fontFamily.sans}",
+          "fontWeight":   "{fontWeight.extra}",
+          "fontSize":     "{fontSize.5xl}",
+          "lineHeight":   "{lineHeights.display}",
+          "letterSpacing":"{letterSpacing.display}"
+        },
+        "type": "typography",
+        "description": "Hero H1 on tablet / large section H2"
+      },
+      "section": {
+        "value": {
+          "fontFamily":   "{fontFamily.sans}",
+          "fontWeight":   "{fontWeight.extra}",
+          "fontSize":     "{fontSize.4xl}",
+          "lineHeight":   "{lineHeights.tight}",
+          "letterSpacing":"{letterSpacing.display}"
+        },
+        "type": "typography",
+        "description": "Standard section H2"
+      },
+      "card-title": {
+        "value": {
+          "fontFamily": "{fontFamily.sans}",
+          "fontWeight": "{fontWeight.bold}",
+          "fontSize":   "{fontSize.lg}",
+          "lineHeight": "{lineHeights.tight}"
+        },
+        "type": "typography",
+        "description": "Card H3"
+      },
+      "body": {
+        "value": {
+          "fontFamily": "{fontFamily.sans}",
+          "fontWeight": "{fontWeight.regular}",
+          "fontSize":   "{fontSize.base}",
+          "lineHeight": "{lineHeights.normal}"
+        },
+        "type": "typography"
+      },
+      "body-small": {
+        "value": {
+          "fontFamily": "{fontFamily.sans}",
+          "fontWeight": "{fontWeight.regular}",
+          "fontSize":   "{fontSize.sm}",
+          "lineHeight": "{lineHeights.normal}"
+        },
+        "type": "typography"
+      },
+      "eyebrow": {
+        "value": {
+          "fontFamily":   "{fontFamily.sans}",
+          "fontWeight":   "{fontWeight.bold}",
+          "fontSize":     "{fontSize.xs}",
+          "lineHeight":   "{lineHeights.tight}",
+          "letterSpacing":"{letterSpacing.eyebrow}",
+          "textCase":     "uppercase"
+        },
+        "type": "typography",
+        "description": "All-caps eyebrow label above section headings"
+      },
+      "button": {
+        "value": {
+          "fontFamily": "{fontFamily.sans}",
+          "fontWeight": "{fontWeight.bold}",
+          "fontSize":   "{fontSize.base}",
+          "lineHeight": "{lineHeights.tight}"
+        },
+        "type": "typography"
+      }
+    },
+    "spacing": {
+      "1":  { "value": "4px",  "type": "spacing" },
+      "2":  { "value": "8px",  "type": "spacing" },
+      "3":  { "value": "12px", "type": "spacing" },
+      "4":  { "value": "16px", "type": "spacing" },
+      "5":  { "value": "20px", "type": "spacing" },
+      "6":  { "value": "24px", "type": "spacing" },
+      "8":  { "value": "32px", "type": "spacing" },
+      "10": { "value": "40px", "type": "spacing" },
+      "12": { "value": "48px", "type": "spacing" },
+      "16": { "value": "64px", "type": "spacing" },
+      "20": { "value": "80px", "type": "spacing" }
+    },
+    "borderRadius": {
+      "sm":   { "value": "4px",   "type": "borderRadius" },
+      "md":   { "value": "8px",   "type": "borderRadius" },
+      "lg":   { "value": "12px",  "type": "borderRadius", "description": "Cards, tiles" },
+      "xl":   { "value": "16px",  "type": "borderRadius", "description": "Mega-menu, sheets" },
+      "full": { "value": "9999px","type": "borderRadius", "description": "Pills, buttons" }
+    },
+    "border": {
+      "hairline": {
+        "value": {
+          "color": "{color.surface.line}",
+          "width": "1px",
+          "style": "solid"
+        },
+        "type": "border"
+      },
+      "button-ghost": {
+        "value": {
+          "color": "{color.brand.blue}",
+          "width": "1.5px",
+          "style": "solid"
+        },
+        "type": "border"
+      }
+    }
+  }
+}

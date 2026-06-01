@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Total Uptime — Reskin audit</title>
+  <meta name="description" content="Findings &amp; recommendations from the brand and navigation audit of the Total Uptime site, against the Edgenexus visual direction." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="dist/tailwind.css" />
+  <style>
+    /* ---------- Doc-only layout helpers ----------
+     * Fixed 1024 px content width: matches a common doc artboard width
+     * and imports into Figma at 1:1 via html.to.design.
+     * Every .doc-page is sized to A4 portrait (1024 × 1448 at 96 dpi) so
+     * Chrome's "Save as PDF" produces one printable page per section.
+     */
+    body { background: #EFF3F7; }
+
+    .doc-shell {
+      width: 1024px;
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    .doc-page {
+      background: white;
+      width: 1024px;
+      max-width: 100%;
+      min-height: 1448px;
+      box-shadow: 0 4px 24px -8px rgba(20, 31, 54, .14), 0 24px 60px -24px rgba(20, 31, 54, .12);
+      border-radius: 6px;
+      padding: 72px;
+      position: relative;
+      page-break-after: always;
+      break-after: page;
+      margin-bottom: 32px;
+    }
+    .doc-page:last-of-type { page-break-after: auto; break-after: auto; }
+    .doc-page + .doc-page { margin-top: 0; }
+
+    .doc-page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      margin-bottom: 36px;
+      border-bottom: 1px solid var(--tu-line);
+    }
+    .doc-page-no {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--tu-ink2);
+    }
+
+    /* Swatch tile used throughout the audit */
+    .audit-swatch {
+      border-radius: 12px;
+      padding: 18px;
+      min-height: 132px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid rgba(0,0,0,.06);
+    }
+    .audit-swatch .meta { font-size: 10.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; opacity: .9; }
+    .audit-swatch .name { font-weight: 800; font-size: 15px; margin-top: 4px; }
+    .audit-swatch .hex  { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; font-weight: 700; opacity: .85; }
+    .audit-swatch .role { font-size: 11.5px; opacity: .88; line-height: 1.4; max-width: 200px; }
+
+    /* Severity badges */
+    .sev {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 9px; border-radius: 999px;
+      font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .sev-critical { background: #FBDCE0; color: #8C1A2A; }
+    .sev-major    { background: #FFEDC9; color: #7A4A00; }
+    .sev-minor    { background: #DCEEFB; color: #0E4A78; }
+    .sev-ok       { background: #DCF5E8; color: #0F6A41; }
+
+    /* Migration arrow rail */
+    .mig-row {
+      display: grid;
+      grid-template-columns: 1fr 32px 1fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+    .mig-arrow {
+      display: flex; align-items: center; justify-content: center;
+      color: var(--tu-blue); font-weight: 800; font-size: 18px;
+    }
+    .mig-cell {
+      border: 1px solid var(--tu-line); border-radius: 10px; padding: 12px 14px;
+      display: flex; align-items: center; gap: 12px; background: white;
+    }
+    .mig-chip { width: 28px; height: 28px; border-radius: 7px; flex-shrink: 0; border: 1px solid rgba(0,0,0,.05); }
+
+    /* Phone illustration used in mobile-fix section (pure CSS) */
+    .ill-phone {
+      width: 168px;
+      height: 320px;
+      border-radius: 22px;
+      background: #1a1f2b;
+      padding: 8px 7px 10px;
+      position: relative;
+      box-shadow: 0 6px 14px -4px rgba(20,31,54,.25);
+    }
+    .ill-phone::before {
+      content: ""; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+      width: 62px; height: 13px; background: #0c0f15; border-radius: 0 0 8px 8px; z-index: 2;
+    }
+    .ill-screen {
+      width: 100%; height: 100%; border-radius: 15px; background: white; overflow: hidden; position: relative;
+    }
+    .ill-screen.broken { background: linear-gradient(180deg, white 0 38%, #FBDCE0 38% 100%); }
+    .ill-screen.broken::after {
+      content: "Subnav overflows viewport — anchors don't work";
+      position: absolute; left: 6px; right: 6px; top: 42%;
+      font-size: 9px; font-weight: 700; color: #8C1A2A; text-align: center; line-height: 1.3;
+    }
+    .ill-screen.fixed::after {
+      content: "On this page";
+      position: absolute; right: 8px; bottom: 10px;
+      background: var(--tu-blue); color: white; font-size: 9px; font-weight: 800;
+      padding: 5px 10px; border-radius: 999px;
+    }
+    .ill-mini-hero { background: var(--tu-cyan); height: 84px; padding: 18px 10px 0; }
+    .ill-mini-hero p { color: white; font-size: 10px; font-weight: 800; line-height: 1.15; }
+    .ill-mini-body { padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .ill-mini-line { height: 6px; border-radius: 3px; background: var(--tu-sky); }
+    .ill-mini-line.s { width: 60%; }
+    .ill-mini-tile { height: 28px; border-radius: 5px; background: var(--tu-sky2); border-top: 2px solid var(--tu-cyan); }
+
+    /* Findings list */
+    .find {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px dashed var(--tu-line);
+      align-items: start;
+    }
+    .find:last-child { border-bottom: 0; }
+    .find h4 { font-weight: 800; color: var(--tu-blue); font-size: 14.5px; }
+    .find p  { color: var(--tu-ink2); font-size: 13.5px; margin-top: 4px; line-height: 1.5; }
+
+    /* Print: strip the page shadows + paper colour, give clean margins */
+    @page { size: A4; margin: 16mm; }
+    @media print {
+      body { background: white; }
+      .doc-page {
+        box-shadow: none;
+        border-radius: 0;
+        margin: 0 !important;
+        padding: 0 !important;
+        min-height: auto;
+        width: auto;
+      }
+      .doc-shell { width: auto; }
+      .doc-page + .doc-page { margin-top: 0; }
+      .no-print  { display: none !important; }
+    }
+  </style>
+</head>
+<body class="text-brand-ink">
+
+  <!-- ════════ ONSCREEN TOOLBAR (hidden in print) ════════ -->
+  <header class="no-print sticky top-0 z-40 bg-white border-b border-brand-line">
+    <div class="mx-auto max-w-[1024px] flex items-center justify-between gap-6 px-6 py-3.5">
+      <a href="index.html" class="flex items-center gap-3" aria-label="Total Uptime home">
+        <img src="assets/tu-logo.svg" alt="Total Uptime" class="h-9 w-auto" />
+        <span class="hidden sm:inline text-brand-ink2 text-sm">/ Reskin audit</span>
+      </a>
+      <div class="flex items-center gap-2">
+        <a href="brand.html" class="btn btn-ghost text-sm">Brand system</a>
+        <button onclick="window.print()" class="btn btn-primary text-sm">Save as PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="doc-shell py-8">
+
+    <!-- ════════ PAGE 01 — COVER ════════ -->
+    <article class="doc-page">
+      <div class="doc-page-header">
+        <span class="doc-page-no">01 · Cover</span>
+        <img src="assets/tu-logo.svg" alt="Total Uptime" class="h-8 w-auto" />
+      </div>
+
+      <div class="mt-16">
+        <p class="eyebrow">Reskin audit · v1</p>
+        <h1 class="mt-3 h-display text-6xl leading-[1.02]">Total Uptime,<br/>through an<br/><span class="text-brand-cyan">Edgenexus lens.</span></h1>
+        <p class="mt-8 text-xl text-brand-ink2 max-w-2xl leading-relaxed">
+          What we looked at, what we found, and what we're recommending — from
+          two days of structured audit work against the brief.
+        </p>
+      </div>
+
+      <div class="mt-16 grid grid-cols-3 gap-4">
+        <div class="tile p-5">
+          <p class="eyebrow text-brand-ink2">Pages audited</p>
+          <p class="mt-2 text-3xl font-extrabold text-brand-blue">2</p>
+          <p class="mt-1 text-xs text-brand-ink2">Homepage + Cloud DNS Service page (the brief's flagged page).</p>
+        </div>
+        <div class="tile p-5">
+          <p class="eyebrow text-brand-ink2">Brand references</p>
+          <p class="mt-2 text-3xl font-extrabold text-brand-blue">2</p>
+          <p class="mt-1 text-xs text-brand-ink2">Live HTML/CSS of totaluptime1.wpenginepowered.com and edgenexus.io.</p>
+        </div>
+        <div class="tile p-5">
+          <p class="eyebrow text-brand-ink2">Critical issues</p>
+          <p class="mt-2 text-3xl font-extrabold text-brand-blue">1</p>
+          <p class="mt-1 text-xs text-brand-ink2">Mobile sub-navigation on the DNS page — flagged in the brief.</p>
+        </div>
+      </div>
+
+      <div class="mt-16 grid grid-cols-2 gap-6">
+        <div>
+          <p class="eyebrow text-brand-ink2">In scope</p>
+          <ul class="mt-3 space-y-1.5 text-sm text-brand-ink">
+            <li>· Colour &amp; brand usage across the site</li>
+            <li>· Size and behaviour of the main site menu</li>
+            <li>· Size and behaviour of the new Product menu</li>
+            <li>· Mobile menu — both main nav and DNS sub-nav</li>
+          </ul>
+        </div>
+        <div>
+          <p class="eyebrow text-brand-ink2">Out of scope (phase 2)</p>
+          <ul class="mt-3 space-y-1.5 text-sm text-brand-ink">
+            <li>· New Total Uptime logo</li>
+            <li>· Line-art illustration evolution</li>
+            <li>· Custom stick-figure system</li>
+            <li>· Mascot character</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="absolute bottom-12 left-12 right-12 text-xs text-brand-ink2 border-t border-brand-line pt-4">
+        Sources: live HTML &amp; CSS of <code>totaluptime1.wpenginepowered.com</code> (home + <code>/solutions/cloud-dns-service</code>) and <code>edgenexus.io</code>. Audit conducted 31 May 2026.
+      </p>
+    </article>
+
+    <!-- ════════ PAGE 02 — CURRENT BRAND ════════ -->
+    <article class="doc-page">
+      <div class="doc-page-header">
+        <span class="doc-page-no">02 · Brand audit · current state</span>
+        <span class="text-xs text-brand-ink2 font-semibold">Total Uptime — live site</span>
+      </div>
+
+      <p class="eyebrow">What's on the site today</p>
+      <h2 class="mt-2 h-section text-4xl">Current palette — functional, conservative.</h2>
+      <p class="mt-4 text-lg text-brand-ink2 max-w-3xl">
+        The live Total Uptime palette is built around a mid-blue and a warm orange. It reads as
+        competent enterprise infrastructure — but sits in the middle of the category and doesn't
+        carry distinctive equity. There's no consistent accent or surface system; cards and
+        bands rely on neutral greys.
+      </p>
+
+      <div class="mt-10 grid grid-cols-4 gap-3">
+        <div class="audit-swatch" style="background:#1F6AB5; color:white;">
+          <div>
+            <p class="meta">Primary</p>
+            <p class="name">Brand blue</p>
+            <p class="hex mt-1">#1F6AB5</p>
+          </div>
+          <p class="role">Used on header, hero, logo. Slightly cool, lacks "voltage".</p>
+        </div>
+        <div class="audit-swatch" style="background:#FF7A1A; color:white;">
+          <div>
+            <p class="meta">Accent CTA</p>
+            <p class="name">Brand orange</p>
+            <p class="hex mt-1">#FF7A1A</p>
+          </div>
+          <p class="role">All CTAs. Loud but reads as generic SaaS orange.</p>
+        </div>
+        <div class="audit-swatch border border-brand-line" style="background:#F4F6F8; color:#202020;">
+          <div>
+            <p class="meta">Surface</p>
+            <p class="name">Neutral grey</p>
+            <p class="hex mt-1">#F4F6F8</p>
+          </div>
+          <p class="role">Section background tint. No relationship to the brand colour.</p>
+        </div>
+        <div class="audit-swatch" style="background:#222222; color:white;">
+          <div>
+            <p class="meta">Body text</p>
+            <p class="name">Ink</p>
+            <p class="hex mt-1">#222222</p>
+          </div>
+          <p class="role">Default copy. AAA contrast — keeping this.</p>
+        </div>
+      </div>
+
+      <h3 class="mt-12 text-xl font-bold text-brand-blue">What's working</h3>
+      <ul class="mt-3 space-y-2 text-sm text-brand-ink2">
+        <li>· Information architecture is sound — products, solutions, pricing, resources, company.</li>
+        <li>· Typography (Inter / system) is clean and readable.</li>
+        <li>· Hero/section rhythm with alternating white &amp; tinted bands is the right shape — just needs warmer execution.</li>
+        <li>· Stats messaging is sharp: 100% SLA, 24/7/365, six years uninterrupted.</li>
+      </ul>
+
+      <h3 class="mt-8 text-xl font-bold text-brand-blue">What needs work</h3>
+      <ul class="mt-3 space-y-2 text-sm text-brand-ink2">
+        <li>· <strong class="text-brand-blue">Brand fades into the category.</strong> Mid-blue + orange is a default infrastructure pairing.</li>
+        <li>· <strong class="text-brand-blue">No accent system.</strong> CTAs and "learn more" links use the same orange — no visual hierarchy between commercial and exploratory actions.</li>
+        <li>· <strong class="text-brand-blue">Surface tokens are neutral, not branded.</strong> The page tints feel like a generic Bootstrap theme rather than a system.</li>
+        <li>· <strong class="text-brand-blue">No tokenised category coding.</strong> Product families aren't visually distinguished in nav, tiles or pricing tables.</li>
+      </ul>
+    </article>
+
+    <!-- ════════ PAGE 03 — PROPOSED BRAND ════════ -->
+    <article class="doc-page">
+      <div class="doc-page-header">
+        <span class="doc-page-no">03 · Brand audit · proposed</span>
+        <span class="text-xs text-brand-ink2 font-semibold">Adopting the Edgenexus visual direction</span>
+      </div>
+
+      <p class="eyebrow">What we're proposing</p>
+      <h2 class="mt-2 h-section text-4xl">Edgenexus tokens, applied wholesale.</h2>
+      <p class="mt-4 text-lg text-brand-ink2 max-w-3xl">
+        Five jobs: brand, anchor, accent, support, surface. Every token earns its place — coral
+        is reserved for the single primary CTA per view, cyan owns hero surfaces and link
+        states, deep blue anchors typography and dark bands, mint signals success and
+        category, sky tints the alternating section rhythm.
+      </p>
+
+      <h3 class="mt-10 text-sm font-bold uppercase tracking-wider text-brand-ink2">Brand core</h3>
+      <div class="mt-3 grid grid-cols-4 gap-3">
+        <div class="audit-swatch" style="background:#01ADEF; color:white;">
+          <div><p class="meta">Primary</p><p class="name">brand-cyan</p><p class="hex mt-1">#01ADEF</p></div>
+          <p class="role">Hero surface, tile borders, link hover.</p>
+        </div>
+        <div class="audit-swatch" style="background:#0192C7; color:white;">
+          <div><p class="meta">Hover</p><p class="name">brand-cyan2</p><p class="hex mt-1">#0192C7</p></div>
+          <p class="role">Cyan pressed / hover state.</p>
+        </div>
+        <div class="audit-swatch" style="background:#144586; color:white;">
+          <div><p class="meta">Anchor</p><p class="name">brand-blue</p><p class="hex mt-1">#144586</p></div>
+          <p class="role">Headings, eyebrows, ghost buttons.</p>
+        </div>
+        <div class="audit-swatch" style="background:#0E2F5C; color:white;">
+          <div><p class="meta">Deep anchor</p><p class="name">brand-blue9</p><p class="hex mt-1">#0E2F5C</p></div>
+          <p class="role">Footer, modal backdrops, code panel.</p>
+        </div>
+      </div>
+
+      <h3 class="mt-8 text-sm font-bold uppercase tracking-wider text-brand-ink2">Accents</h3>
+      <div class="mt-3 grid grid-cols-4 gap-3">
+        <div class="audit-swatch" style="background:#FF5A6E; color:white;">
+          <div><p class="meta">Commercial</p><p class="name">brand-coral</p><p class="hex mt-1">#FF5A6E</p></div>
+          <p class="role">One primary CTA per view. Drives commercial action.</p>
+        </div>
+        <div class="audit-swatch" style="background:#E63F55; color:white;">
+          <div><p class="meta">Coral hover</p><p class="name">brand-coral2</p><p class="hex mt-1">#E63F55</p></div>
+          <p class="role">Primary CTA pressed / hover.</p>
+        </div>
+        <div class="audit-swatch" style="background:#5CC4A8; color:#0E2F5C;">
+          <div><p class="meta">Support</p><p class="name">brand-mint</p><p class="hex mt-1">#5CC4A8</p></div>
+          <p class="role">Success, category chip, decorative.</p>
+        </div>
+        <div class="audit-swatch border border-brand-line" style="background:#DFEAF2; color:#0E2F5C;">
+          <div><p class="meta">Surface</p><p class="name">brand-sky</p><p class="hex mt-1">#DFEAF2</p></div>
+          <p class="role">Section tint. Alternates with white for rhythm.</p>
+        </div>
+      </div>
+
+      <h3 class="mt-10 text-xl font-bold text-brand-blue">Why this works for Total Uptime</h3>
+      <ul class="mt-3 space-y-2 text-sm text-brand-ink2">
+        <li>· <strong class="text-brand-blue">Distinctive.</strong> The cyan + coral pairing is recognisable and rare in infrastructure.</li>
+        <li>· <strong class="text-brand-blue">Hierarchical.</strong> Coral is rationed to commercial CTAs only — visual hierarchy by colour rules out ambiguity.</li>
+        <li>· <strong class="text-brand-blue">Tokenised.</strong> Every UI element resolves to a named token, so design and dev stay in sync.</li>
+        <li>· <strong class="text-brand-blue">Accessible.</strong> Anchor blue is AAA on white (9.44:1); contrast audit shipped alongside the system.</li>
+      </ul>
+    </article>
+
+    <!-- ════════ PAGE 04 — MIGRATION MAP ════════ -->
+    <article class="doc-page">
+      <div class="doc-page-header">
+        <span class="doc-page-no">04 · Token migration map</span>
+        <span class="text-xs text-brand-ink2 font-semibold">Old token → new token</span>
+      </div>
+
+      <p class="eyebrow">How it converts</p>
+      <h2 class="mt-2 h-section text-4xl">One swap per role — no orphaned tokens.</h2>
+      <p class="mt-4 text-lg text-brand-ink2 max-w-3xl">
+        Every token in the current palette maps cleanly to a new token. The dev team can do a
+        find/replace pass through <code class="text-brand-blue">totaluptime-next</code> and
+        nothing is left over.
+      </p>
+
+      <div class="mt-10 space-y-4">
+
+        <div class="mig-row">
+          <div class="mig-cell">
+            <span class="mig-chip" style="background:#1F6AB5"></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[11px] font-bold text-brand-ink2 uppercase tracking-wider">Old · primary blue</p>
+              <p class="font-bold text-brand-blue text-sm">#1F6AB5</p>
+            </div>
+          </div>
+          <div class="mig-arrow">→</div>
+          <div class="mig-cell">
+            <span class="mig-chip" style="background:#144586"></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[11px] font-bold text-brand-ink2 uppercase tracking-wider">New · brand-blue (anchor)</p>
+              <p class="font-bold text-brand-blue text-sm">#144586 — deepened for AAA on white</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mig-row">
+          <div class="mig-cell">
+            <span class="mig-chip" style="background:#FF7A1A"></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[11px] font-bold text-brand-ink2 uppercase tracking-wider">Old · CTA orange</p>
+              <p class="font-bold text-brand-blue text-sm">#FF7A1A</p>
+            </div>
+          </div>
+          <div class="mig-arrow">→</div>
+          <div class="mig-cell">
+            <span class="mig-chip" style="background:#FF5A6E"></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[11px] font-bold text-brand-ink2 uppercase tracking-wider">New · brand-coral (commercial CTA)</p>
+              <p class="font-bold text-brand-blue text-sm">#FF5A6E — warmer, more contemporary</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mig-row">
+          <div class="mig-cell">
+            <span class="mig-chip border border-brand-line" style="background:#F4F6F8"></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[11px] font-bold text-brand-ink2 uppercase tracking-wider">Old · neutral grey surface</p>
+              <p class="font-bold text-brand-blue text-sm">#F4F6F8</p>
+            </div>
+          </div>
+          <div class="mig-arrow">→</div>
+          <div class="mig-cell">
+            <span class="mig-chip" style="background:#DFEAF2"></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[11px] font-bold text-brand-ink2 uppercase tracking-wider">New · brand-sky (branded surface)</p>
+              <p class="font-bold text-brand-blue text-sm">#DFEAF2 — cool tint, sits in the brand family</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mig-row">
+          <div class="mig-cell">
+            <span class="mig-chip" style="background:#222"></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[11px] font-bold text-brand-ink2 uppercase tracking-wider">Old · body ink</p>
+              <p class="font-bold text-brand-blue text-sm">#222222</p>
+            </div>
+          </div>
+          <div class="mig-arrow">→</div>
+          <div class="mig-cell">
+            <span class="mig-chip" style="background:#202020"></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[11px] font-bold text-brand-ink2 uppercase tracking-wider">New · brand-ink (16.29:1)</p>
+              <p class="font-bold text-brand-blue text-sm">#202020 — slightly cooler, AAA on white</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mig-row">
+          <div class="mig-cell" style="border-style:dashed">
+            <span class="mig-chip" style="background:#E5E7EB"></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[11px] font-bold text-brand-ink2 uppercase tracking-wider">Old · &lt;not defined&gt;</p>
+              <p class="font-bold text-brand-blue text-sm">No success / support colour</p>
+            </div>
+          </div>
+          <div class="mig-arrow">→</div>
+          <div class="mig-cell">
+            <span class="mig-chip" style="background:#5CC4A8"></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[11px] font-bold text-brand-ink2 uppercase tracking-wider">New · brand-mint (support)</p>
+              <p class="font-bold text-brand-blue text-sm">#5CC4A8 — success badges, DNS category</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mig-row">
+          <div class="mig-cell" style="border-style:dashed">
+            <span class="mig-chip" style="background:#E5E7EB"></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[11px] font-bold text-brand-ink2 uppercase tracking-wider">Old · &lt;not defined&gt;</p>
+              <p class="font-bold text-brand-blue text-sm">No dark / footer surface</p>
+            </div>
+          </div>
+          <div class="mig-arrow">→</div>
+          <div class="mig-cell">
+            <span class="mig-chip" style="background:#0E2F5C"></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[11px] font-bold text-brand-ink2 uppercase tracking-wider">New · brand-blue9 (anchor dark)</p>
+              <p class="font-bold text-brand-blue text-sm">#0E2F5C — footer, modal backdrops</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="mt-10 text-sm text-brand-ink2">
+        Mapping is defined in <code class="text-brand-blue">tailwind.config.js</code> and
+        consumed by every component via <code class="text-brand-blue">@apply</code>.
+      </p>
+    </article>
+
+    <!-- ════════ PAGE 05 — NAV AUDIT (DESKTOP) ════════ -->
+    <article class="doc-page">
+      <div class="doc-page-header">
+        <span class="doc-page-no">05 · Navigation audit · desktop</span>
+        <span class="text-xs text-brand-ink2 font-semibold">Both pages, ≥ 1024 px viewports</span>
+      </div>
+
+      <p class="eyebrow">Desktop nav findings</p>
+      <h2 class="mt-2 h-section text-4xl">Largely OK — but Products needs room to breathe.</h2>
+      <p class="mt-4 text-lg text-brand-ink2 max-w-3xl">
+        The current desktop main menu works. The issue is its <em>future</em> capacity: the new
+        Products menu being planned has more line items than a single dropdown can carry, and
+        the existing pattern doesn't support tiered grouping.
+      </p>
+
+      <div class="mt-10">
+        <div class="find">
+          <span class="sev sev-ok">No issue</span>
+          <div>
+            <h4>Header layout, utility row, sign-in / CTA</h4>
+            <p>Standard pattern, predictable interaction, works to ~1280 px. Keeping it as the base.</p>
+          </div>
+        </div>
+        <div class="find">
+          <span class="sev sev-major">Major</span>
+          <div>
+            <h4>Single-column Products dropdown won't scale</h4>
+            <p>The new Products menu groups items into three families (application delivery, DNS, network &amp; security). A flat dropdown loses the hierarchy and crams items at &gt; 8 entries.</p>
+          </div>
+        </div>
+        <div class="find">
+          <span class="sev sev-minor">Minor</span>
+          <div>
+            <h4>DNS page sub-nav (desktop) hangs off the hero</h4>
+            <p>The in-page anchor list reads as part of the hero rather than a persistent navigation aid. Once you scroll past it, finding it again requires scrolling back up.</p>
+          </div>
+        </div>
+        <div class="find">
+          <span class="sev sev-minor">Minor</span>
+          <div>
+            <h4>Active state is colour-only</h4>
+            <p>Hover and active states rely on text colour change alone. Adds <code>aria-current</code> + a pill background for clearer affordance.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="mt-10 text-xl font-bold text-brand-blue">Recommendation</h3>
+      <ul class="mt-3 space-y-2 text-sm text-brand-ink2">
+        <li>· Adopt a <strong class="text-brand-blue">3-column mega-menu</strong> for Products, organised by category (cyan / mint / coral chip per column).</li>
+        <li>· Add a <strong class="text-brand-blue">sticky pill rail</strong> for the DNS page in-page anchors — stays visible during scroll with scrollspy active state.</li>
+        <li>· Wire up <strong class="text-brand-blue">scrollspy</strong> so the pill rail reflects current section.</li>
+      </ul>
+    </article>
+
+    <!-- ════════ PAGE 06 — NAV AUDIT (MOBILE — THE CRITICAL FIND) ════════ -->
+    <article class="doc-page">
+      <div class="doc-page-header">
+        <span class="doc-page-no">06 · Navigation audit · mobile</span>
+        <span class="sev sev-critical">Critical — flagged in brief</span>
+      </div>
+
+      <p class="eyebrow">The brief's number-two ask</p>
+      <h2 class="mt-2 h-section text-4xl">DNS page mobile sub-nav — broken.</h2>
+      <p class="mt-4 text-lg text-brand-ink2 max-w-3xl">
+        The client called this out in the brief, and the audit confirms it. The current DNS page
+        sub-navigation can't be used on mobile at all: the sticky bar overflows the viewport,
+        anchors stop firing once you scroll, and there's no recovery affordance.
+      </p>
+
+      <div class="mt-10 grid grid-cols-2 gap-10 items-start">
+        <div>
+          <div class="flex items-start gap-6">
+            <div class="ill-phone">
+              <div class="ill-screen broken">
+                <div class="ill-mini-hero"><p>Comprehensive DNS Infrastructure Platform.</p></div>
+                <div class="ill-mini-body">
+                  <span class="ill-mini-line"></span>
+                  <span class="ill-mini-line s"></span>
+                  <span class="ill-mini-line"></span>
+                </div>
+              </div>
+            </div>
+            <div class="flex-1">
+              <p class="eyebrow text-brand-blue">Today</p>
+              <p class="mt-2 font-bold text-brand-blue">Sticky subnav overflows the viewport.</p>
+              <p class="mt-2 text-sm text-brand-ink2">Six anchors crammed into a 375 px row. Horizontal scroll is broken, anchors lose target offset, and there's no visual indication of current section.</p>
+            </div>
+          </div>
+
+          <div class="mt-8">
+            <p class="eyebrow text-brand-ink2">All mobile nav findings</p>
+            <ul class="mt-3 space-y-2 text-sm text-brand-ink2">
+              <li>· <strong class="text-brand-blue">DNS subnav unusable</strong> — overflow, broken anchors, no recovery.</li>
+              <li>· <strong class="text-brand-blue">Main hamburger has flat list</strong> — no grouping, no category coding, can't scan.</li>
+              <li>· <strong class="text-brand-blue">No "where am I" affordance</strong> on long pages.</li>
+              <li>· <strong class="text-brand-blue">CTAs hide</strong> below-the-fold in the drawer — commercial actions get buried.</li>
+              <li>· <strong class="text-brand-blue">Tap targets &lt; 44 px</strong> on dropdown chevrons.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-start gap-6">
+            <div class="ill-phone">
+              <div class="ill-screen fixed">
+                <div class="ill-mini-hero"><p>Comprehensive DNS Infrastructure Platform.</p></div>
+                <div class="ill-mini-body">
+                  <span class="ill-mini-line"></span>
+                  <span class="ill-mini-line s"></span>
+                  <span class="ill-mini-tile"></span>
+                  <span class="ill-mini-tile"></span>
+                </div>
+              </div>
+            </div>
+            <div class="flex-1">
+              <p class="eyebrow text-brand-blue">Proposed</p>
+              <p class="mt-2 font-bold text-brand-blue">Floating "On this page" pill → bottom sheet.</p>
+              <p class="mt-2 text-sm text-brand-ink2">Always-reachable pill sits bottom-right (clear of the thumb-zone safe area). Tap opens a 6-anchor bottom sheet with the primary CTA pinned to the bottom.</p>
+            </div>
+          </div>
+
+          <div class="mt-8 tile p-4">
+            <p class="eyebrow text-brand-ink2">Why this pattern</p>
+            <ul class="mt-2 space-y-1.5 text-xs text-brand-ink2">
+              <li>· <strong class="text-brand-blue">Always visible</strong> — survives any scroll position.</li>
+              <li>· <strong class="text-brand-blue">Thumb-reachable</strong> — bottom-right of viewport.</li>
+              <li>· <strong class="text-brand-blue">Familiar</strong> — bottom sheet pattern is standard on iOS &amp; Android.</li>
+              <li>· <strong class="text-brand-blue">Accessible</strong> — sheet uses <code>role="dialog"</code>, traps focus, closes on ESC.</li>
+              <li>· <strong class="text-brand-blue">Tap target ≥ 44 × 44 px</strong> (Apple HIG).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ════════ PAGE 07 — RECOMMENDATIONS · PATTERNS ════════ -->
+    <article class="doc-page">
+      <div class="doc-page-header">
+        <span class="doc-page-no">07 · Recommendations · patterns</span>
+        <span class="text-xs text-brand-ink2 font-semibold">Adopted in the prototype</span>
+      </div>
+
+      <p class="eyebrow">Patterns the reskin uses</p>
+      <h2 class="mt-2 h-section text-4xl">Three nav patterns, one consistent system.</h2>
+      <p class="mt-4 text-lg text-brand-ink2 max-w-3xl">
+        Each pattern below is built into the prototype, lives in
+        <code class="text-brand-blue">src/input.css</code>, and is documented in the brand
+        system. They share tokens — colour, type, spacing, motion — so they feel like one
+        product.
+      </p>
+
+      <div class="mt-10 space-y-8">
+
+        <div class="tile p-6">
+          <div class="flex items-start justify-between gap-6">
+            <div>
+              <span class="sev sev-ok">Pattern 01</span>
+              <h3 class="mt-3 text-xl font-extrabold text-brand-blue">Desktop mega-menu (Products)</h3>
+              <p class="mt-2 text-sm text-brand-ink2 max-w-xl">Three columns, one per category. Coloured category chip + eyebrow per column. Each item carries a one-line description so users can scan rather than read.</p>
+            </div>
+            <div class="flex gap-3">
+              <span class="cat cat-cyan w-3 h-3"></span>
+              <span class="cat cat-mint w-3 h-3"></span>
+              <span class="cat cat-coral w-3 h-3"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tile p-6">
+          <span class="sev sev-ok">Pattern 02</span>
+          <h3 class="mt-3 text-xl font-extrabold text-brand-blue">Mobile main drawer</h3>
+          <p class="mt-2 text-sm text-brand-ink2 max-w-2xl">Full-height drawer slides in from the right. Each primary item is a collapsible accordion (Alpine's <code>x-collapse</code>). Primary CTA is pinned to the bottom so it never scrolls off-screen. Tap targets are ≥ 44 px throughout.</p>
+        </div>
+
+        <div class="tile p-6">
+          <span class="sev sev-ok">Pattern 03</span>
+          <h3 class="mt-3 text-xl font-extrabold text-brand-blue">In-page navigation (desktop pill rail + mobile sheet)</h3>
+          <p class="mt-2 text-sm text-brand-ink2 max-w-2xl">Long product pages (DNS, future product pages) get a sticky pill rail on desktop and a floating "On this page" FAB on mobile. Both share the same anchor list and active state via shared Alpine store — change the anchors once and both surfaces update.</p>
+        </div>
+
+      </div>
+    </article>
+
+    <!-- ════════ PAGE 08 — ROADMAP ════════ -->
+    <article class="doc-page">
+      <div class="doc-page-header">
+        <span class="doc-page-no">08 · Roadmap</span>
+        <span class="text-xs text-brand-ink2 font-semibold">Phase 1 → 2 → 3</span>
+      </div>
+
+      <p class="eyebrow">What's next</p>
+      <h2 class="mt-2 h-section text-4xl">Where this slots into the bigger plan.</h2>
+      <p class="mt-4 text-lg text-brand-ink2 max-w-3xl">
+        The reskin is phase 1. It locks the palette, type, components and nav patterns so every
+        downstream phase 2 deliverable inherits a consistent foundation — and nothing needs
+        re-work when illustration and mascot land.
+      </p>
+
+      <ol class="mt-10 space-y-5">
+        <li class="tile p-6 flex gap-5 items-start">
+          <span class="step-pill" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:999px;background:var(--tu-cyan);color:white;font-weight:800;font-size:14px;flex-shrink:0;">1</span>
+          <div>
+            <p class="eyebrow text-brand-blue">Phase 1 · Now (this delivery)</p>
+            <p class="mt-1 font-bold text-brand-blue">Palette, type, components, nav patterns, mobile fix.</p>
+            <p class="mt-2 text-sm text-brand-ink2">Two pages built end-to-end (<code>index.html</code> + <code>cloud-dns-service.html</code>), brand system documented, accessibility audit passed, tokens exported for Figma.</p>
+          </div>
+        </li>
+        <li class="tile p-6 flex gap-5 items-start">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:999px;background:var(--tu-blue);color:white;font-weight:800;font-size:14px;flex-shrink:0;">2</span>
+          <div>
+            <p class="eyebrow text-brand-blue">Phase 2 · Next</p>
+            <p class="mt-1 font-bold text-brand-blue">Logo refresh, line-art illustration, stick-figure system, mascot.</p>
+            <p class="mt-2 text-sm text-brand-ink2">The four expressive systems leadership called out. All inherit the palette and type from phase 1.</p>
+          </div>
+        </li>
+        <li class="tile p-6 flex gap-5 items-start">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:999px;background:var(--tu-blue9);color:white;font-weight:800;font-size:14px;flex-shrink:0;">3</span>
+          <div>
+            <p class="eyebrow text-brand-blue">Phase 3 · After</p>
+            <p class="mt-1 font-bold text-brand-blue">Roll-out across remaining product pages &amp; campaigns.</p>
+            <p class="mt-2 text-sm text-brand-ink2">Once phases 1 + 2 are signed off, every remaining product page, blog template, and campaign micro-site gets the same treatment — using the same tokens and components.</p>
+          </div>
+        </li>
+      </ol>
+
+      <div class="mt-12 tile p-6">
+        <p class="eyebrow text-brand-blue">Handover artefacts</p>
+        <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <p class="font-bold text-brand-blue">For design</p>
+            <ul class="mt-2 space-y-1 text-brand-ink2">
+              <li>· <code>figma-tokens.json</code> — Tokens Studio import</li>
+              <li>· <code>menu-states.html</code> — all states for html.to.design</li>
+              <li>· <code>brand.html</code> — living brand system</li>
+            </ul>
+          </div>
+          <div>
+            <p class="font-bold text-brand-blue">For engineering</p>
+            <ul class="mt-2 space-y-1 text-brand-ink2">
+              <li>· <code>tailwind.config.js</code> — brand tokens</li>
+              <li>· <code>src/input.css</code> — components via <code>@apply</code></li>
+              <li>· <code>scripts/contrast.js</code> — WCAG check</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- ════════ ONSCREEN FOOTER (hidden in print) ════════ -->
+  <footer class="no-print mt-8 border-t border-brand-line bg-white">
+    <div class="mx-auto max-w-[1024px] px-6 py-6 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between text-sm">
+      <span class="text-brand-ink2">© Total Uptime — reskin audit, eight pages.</span>
+      <div class="flex items-center gap-3">
+        <a href="brand.html" class="text-brand-cyan font-bold hover:text-brand-cyan2">Brand system →</a>
+        <button onclick="window.print()" class="btn btn-primary text-sm">Save as PDF</button>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

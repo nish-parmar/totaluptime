@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Total Uptime® — The API and SaaS Cloud</title>
+  <meta name="description" content="Availability, security, performance &amp; infrastructure for critical web apps." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Compiled Tailwind bundle (brand tokens + components baked in via @layer) -->
+  <link rel="stylesheet" href="dist/tailwind.css" />
+  <!-- site.js MUST execute before alpine.js boots so Alpine.data('mobileNav')
+       is registered by the time Alpine processes <body x-data>. -->
+  <script defer src="assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body x-data>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- ════════ HEADER ════════ -->
+  <header x-data="megaNav()" @keydown.escape.window="closeAll()" class="sticky top-0 z-40 bg-white border-b border-brand-line">
+    <!-- Utility row (desktop only) -->
+    <div class="hidden lg:block surface-sky-soft">
+      <div class="mx-auto max-w-7xl flex items-center justify-end gap-6 px-6 text-xs text-brand-ink2">
+        <a href="#" class="py-2 hover:text-brand-cyan">Status</a>
+        <a href="#" class="py-2 hover:text-brand-cyan">Support</a>
+        <a href="#" class="py-2 hover:text-brand-cyan">Login</a>
+      </div>
+    </div>
+
+    <!-- Main row -->
+    <div class="mx-auto max-w-7xl flex items-center justify-between gap-6 px-4 sm:px-6 py-3.5">
+      <a href="index.html" class="flex items-center" aria-label="Total Uptime home">
+        <img src="assets/tu-logo.svg" alt="Total Uptime" class="h-9 w-auto" />
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden lg:flex items-center gap-1 text-[15px]" aria-label="Primary">
+        <div class="relative" @mouseenter="open('products')" @mouseleave="close('products')">
+          <button class="nav-link inline-flex items-center gap-1" :aria-expanded="active==='products'" @click="toggle('products')">
+            Products
+            <svg class="w-3.5 h-3.5 text-brand-ink2 transition-transform" :class="active==='products' && 'rotate-180'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div x-show="active==='products'" x-transition.opacity x-cloak class="mega" @click.away="closeAll()">
+            <div class="grid grid-cols-3 gap-x-8 gap-y-2">
+              <div>
+                <div class="flex items-center gap-2 mb-2"><span class="cat cat-cyan"></span><p class="eyebrow eyebrow-blue text-brand-ink2">Application delivery</p></div>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">ADC as a Service</span><span class="block text-xs text-brand-ink2">Improve availability, security and performance for any app.</span></a>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">Cloud Load Balancing</span><span class="block text-xs text-brand-ink2">Distribute traffic to any cloud or device.</span></a>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">Global Server Load Balancing</span><span class="block text-xs text-brand-ink2">Proximity routing behind a single anycast IP.</span></a>
+              </div>
+              <div>
+                <div class="flex items-center gap-2 mb-2"><span class="cat cat-mint"></span><p class="eyebrow eyebrow-blue text-brand-ink2">DNS services</p></div>
+                <a href="cloud-dns-service.html" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">Cloud DNS Service</span><span class="block text-xs text-brand-ink2">Ensure 100% reliability of name resolution.</span></a>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">Protective DNS</span><span class="block text-xs text-brand-ink2">Block malware, phishing and botnets at the gateway.</span></a>
+              </div>
+              <div>
+                <div class="flex items-center gap-2 mb-2"><span class="cat cat-coral"></span><p class="eyebrow eyebrow-blue text-brand-ink2">Network &amp; security</p></div>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">Multicloud Networking</span><span class="block text-xs text-brand-ink2">Build a mesh of networks between sites anywhere.</span></a>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">Web App &amp; API Protection</span><span class="block text-xs text-brand-ink2">Protect against 15 classes of vulnerabilities.</span></a>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">BGP over GRE / VPN</span><span class="block text-xs text-brand-ink2">Static IP anywhere over standard ISP links.</span></a>
+              </div>
+            </div>
+            <div class="mt-3 pt-3 hairline text-right">
+              <a href="#" class="text-sm font-bold text-brand-cyan hover:text-brand-cyan2 inline-flex items-center gap-1">View all products →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative" @mouseenter="open('solutions')" @mouseleave="close('solutions')">
+          <button class="nav-link inline-flex items-center gap-1" :aria-expanded="active==='solutions'" @click="toggle('solutions')">
+            Solutions
+            <svg class="w-3.5 h-3.5 text-brand-ink2 transition-transform" :class="active==='solutions' && 'rotate-180'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div x-show="active==='solutions'" x-transition.opacity x-cloak class="mega" @click.away="closeAll()">
+            <div class="grid grid-cols-2 gap-x-8 gap-y-2">
+              <div>
+                <div class="flex items-center gap-2 mb-2"><span class="cat cat-cyan"></span><p class="eyebrow eyebrow-blue text-brand-ink2">Continuity &amp; resilience</p></div>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">Disaster recovery &amp; BC</span></a>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">Automate datacenter failover</span></a>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">Increase app availability</span></a>
+              </div>
+              <div>
+                <div class="flex items-center gap-2 mb-2"><span class="cat cat-mint"></span><p class="eyebrow eyebrow-blue text-brand-ink2">Routing &amp; compliance</p></div>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">Network traffic routing</span></a>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">Decrease vendor lock-in</span></a>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">Government DNS service</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="nav-link">Pricing</a>
+        <a href="#" class="nav-link">Resources</a>
+        <a href="#" class="nav-link">Company</a>
+      </nav>
+
+      <div class="hidden lg:flex items-center gap-2">
+        <a href="#" class="btn btn-ghost">Sign in</a>
+        <a href="#" class="btn btn-primary">Start free trial</a>
+      </div>
+
+      <!-- Mobile hamburger -->
+      <button @click="$dispatch('toggle-mobile-nav')" class="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-lg text-brand-blue hover:bg-brand-sky2" aria-label="Open menu">
+        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ════════ MOBILE DRAWER ════════ -->
+  <div x-data="mobileNav()" @toggle-mobile-nav.window="toggle()" x-show="open" x-cloak style="display:none" class="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+    <div x-show="open" x-cloak x-transition.opacity @click="close()" class="fixed inset-0 bg-brand-blue9/60 backdrop-blur-sm"></div>
+    <div
+      x-show="open"
+      x-cloak
+      x-transition:enter="transition ease-out duration-300" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
+      x-transition:leave="transition ease-in duration-200"  x-transition:leave-start="translate-x-0"   x-transition:leave-end="translate-x-full"
+      class="fixed inset-y-0 right-0 w-full max-w-sm bg-white flex flex-col">
+
+      <div class="flex items-center justify-between px-4 py-3 border-b border-brand-line">
+        <span class="font-bold text-brand-blue">Menu</span>
+        <button @click="close()" class="w-10 h-10 inline-flex items-center justify-center rounded-lg hover:bg-brand-sky2" aria-label="Close menu">
+          <svg class="w-6 h-6 text-brand-ink2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <nav class="flex-1 overflow-y-auto p-3 space-y-1" aria-label="Mobile primary">
+        <!-- Products -->
+        <div>
+          <button @click="expand('p')" :aria-expanded="!!expanded.p" class="w-full flex items-center justify-between px-3 py-3 rounded-lg hover:bg-brand-sky2">
+            <span class="flex items-center gap-2 font-semibold text-brand-blue"><span class="cat cat-cyan"></span> Products</span>
+            <svg class="w-4 h-4 text-brand-ink2 transition-transform" :class="expanded.p && 'rotate-180'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div x-show="expanded.p" x-collapse class="pl-5 pr-2 pb-2">
+            <p class="eyebrow text-brand-ink2 mt-3 mb-1">Application delivery</p>
+            <a href="#" @click="close()" class="block py-2 text-sm text-brand-blue font-semibold">ADC as a Service</a>
+            <a href="#" @click="close()" class="block py-2 text-sm text-brand-blue font-semibold">Cloud Load Balancing</a>
+            <a href="#" @click="close()" class="block py-2 text-sm text-brand-blue font-semibold">Global Server Load Balancing</a>
+            <p class="eyebrow text-brand-ink2 mt-3 mb-1">DNS services</p>
+            <a href="cloud-dns-service.html" @click="close()" class="block py-2 text-sm text-brand-blue font-semibold">Cloud DNS Service</a>
+            <a href="#" @click="close()" class="block py-2 text-sm text-brand-blue font-semibold">Protective DNS</a>
+            <p class="eyebrow text-brand-ink2 mt-3 mb-1">Network &amp; security</p>
+            <a href="#" @click="close()" class="block py-2 text-sm text-brand-blue font-semibold">Multicloud Networking</a>
+            <a href="#" @click="close()" class="block py-2 text-sm text-brand-blue font-semibold">Web App &amp; API Protection</a>
+          </div>
+        </div>
+        <!-- Solutions -->
+        <div>
+          <button @click="expand('s')" :aria-expanded="!!expanded.s" class="w-full flex items-center justify-between px-3 py-3 rounded-lg hover:bg-brand-sky2">
+            <span class="flex items-center gap-2 font-semibold text-brand-blue"><span class="cat cat-mint"></span> Solutions</span>
+            <svg class="w-4 h-4 text-brand-ink2 transition-transform" :class="expanded.s && 'rotate-180'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div x-show="expanded.s" x-collapse class="pl-5 pr-2 pb-2">
+            <a href="#" @click="close()" class="block py-2 text-sm text-brand-blue font-semibold">Disaster recovery &amp; BC</a>
+            <a href="#" @click="close()" class="block py-2 text-sm text-brand-blue font-semibold">Automate datacenter failover</a>
+            <a href="#" @click="close()" class="block py-2 text-sm text-brand-blue font-semibold">Increase app availability</a>
+            <a href="#" @click="close()" class="block py-2 text-sm text-brand-blue font-semibold">Network traffic routing</a>
+          </div>
+        </div>
+
+        <a href="#" @click="close()" class="block px-3 py-3 font-semibold text-brand-blue rounded-lg hover:bg-brand-sky2"><span class="inline-flex items-center gap-2"><span class="cat cat-coral"></span> Pricing</span></a>
+        <a href="#" @click="close()" class="block px-3 py-3 font-semibold text-brand-blue rounded-lg hover:bg-brand-sky2"><span class="inline-flex items-center gap-2"><span class="cat cat-blue"></span> Resources</span></a>
+        <a href="#" @click="close()" class="block px-3 py-3 font-semibold text-brand-blue rounded-lg hover:bg-brand-sky2"><span class="inline-flex items-center gap-2"><span class="cat cat-blue"></span> Company</span></a>
+
+        <div class="px-3 py-3 mt-2 surface-sky-soft rounded-xl text-xs text-brand-ink2 space-y-1">
+          <a href="#" class="block py-1.5 hover:text-brand-blue">Status</a>
+          <a href="#" class="block py-1.5 hover:text-brand-blue">Support</a>
+        </div>
+      </nav>
+
+      <!-- Pinned CTAs -->
+      <div class="border-t border-brand-line p-3 flex gap-2 bg-white">
+        <a href="#" @click="close()" class="btn btn-primary flex-1 justify-center">Start free trial</a>
+        <a href="#" @click="close()" class="btn btn-ghost flex-1 justify-center">Sign in</a>
+      </div>
+    </div>
+  </div>
+
+  <main id="main">
+    <!-- ════════ HERO ════════ -->
+    <section class="surface-cyan">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 grid lg:grid-cols-[1.4fr_1fr] gap-10 items-center">
+        <div class="text-white">
+          <p class="eyebrow" style="color: rgba(255,255,255,.85)">Focus on software development — not managing infrastructure or clouds.</p>
+          <h1 class="mt-3 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.05] tracking-tight">
+            The API and SaaS<br />
+            <span class="text-brand-sky">Cloud.</span>
+          </h1>
+          <p class="mt-5 text-lg max-w-xl text-white/90">
+            Availability, security, performance &amp; infrastructure for critical web apps.
+          </p>
+          <div class="mt-7 flex flex-wrap gap-3">
+            <a href="#" class="btn btn-primary text-base px-6 py-3">Book a demo →</a>
+            <a href="#" class="btn btn-ghost-light text-base px-6 py-3">Start a free trial</a>
+          </div>
+          <p class="mt-7 text-sm text-white/80">Compatible with all cloud and network providers.</p>
+        </div>
+
+        <!-- Stat cluster — real figures from the live Total Uptime site -->
+        <div class="relative h-72 sm:h-80">
+          <div class="absolute top-0 left-8 sm:left-16 tile w-56" style="background:#fff">
+            <div class="flex items-center gap-2"><span class="cat cat-mint"></span><span class="eyebrow text-brand-ink2">DNS uptime</span></div>
+            <div class="mt-2 text-3xl font-extrabold text-brand-blue">100%</div>
+            <p class="mt-1 text-xs text-brand-ink2">Six years of uninterrupted service.</p>
+          </div>
+          <div class="absolute top-24 left-32 sm:left-44 tile w-56">
+            <div class="flex items-center gap-2"><span class="cat cat-coral"></span><span class="eyebrow text-brand-ink2">Support</span></div>
+            <div class="mt-2 text-3xl font-extrabold text-brand-blue">24/7/365</div>
+            <p class="mt-1 text-xs text-brand-ink2">Phone &amp; email — including setup.</p>
+          </div>
+          <div class="absolute bottom-0 left-0 tile w-56">
+            <div class="flex items-center gap-2"><span class="cat cat-blue"></span><span class="eyebrow text-brand-ink2">Add-ons required</span></div>
+            <div class="mt-2 text-3xl font-extrabold text-brand-blue">0</div>
+            <p class="mt-1 text-xs text-brand-ink2">Everything you need is built in.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ TRUST ════════ -->
+    <section class="surface-sky-soft border-y border-brand-line">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 text-center">
+        <p class="eyebrow eyebrow-blue">Compatible with all cloud and network providers, including:</p>
+        <ul class="mt-8 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-x-8 gap-y-10 max-w-5xl mx-auto items-center">
+          <li class="flex flex-col items-center gap-3">
+            <img src="https://www.vectorlogo.zone/logos/amazon_aws/amazon_aws-icon.svg"      alt="" aria-hidden="true" class="cloud-logo" loading="lazy" />
+            <span class="text-[11px] font-bold uppercase tracking-wider text-brand-ink2">AWS</span>
+          </li>
+          <li class="flex flex-col items-center gap-3">
+            <img src="https://www.vectorlogo.zone/logos/microsoft_azure/microsoft_azure-icon.svg" alt="" aria-hidden="true" class="cloud-logo" loading="lazy" />
+            <span class="text-[11px] font-bold uppercase tracking-wider text-brand-ink2">Azure</span>
+          </li>
+          <li class="flex flex-col items-center gap-3">
+            <img src="https://www.vectorlogo.zone/logos/google_cloud/google_cloud-icon.svg"   alt="" aria-hidden="true" class="cloud-logo" loading="lazy" />
+            <span class="text-[11px] font-bold uppercase tracking-wider text-brand-ink2">Google Cloud</span>
+          </li>
+          <li class="flex flex-col items-center gap-3">
+            <img src="https://www.vectorlogo.zone/logos/digitalocean/digitalocean-icon.svg"  alt="" aria-hidden="true" class="cloud-logo" loading="lazy" />
+            <span class="text-[11px] font-bold uppercase tracking-wider text-brand-ink2">DigitalOcean</span>
+          </li>
+          <li class="flex flex-col items-center gap-3">
+            <img src="https://www.vectorlogo.zone/logos/oracle/oracle-icon.svg"              alt="" aria-hidden="true" class="cloud-logo" loading="lazy" />
+            <span class="text-[11px] font-bold uppercase tracking-wider text-brand-ink2">Oracle</span>
+          </li>
+          <li class="flex flex-col items-center gap-3">
+            <img src="https://cdn.simpleicons.org/vultr/202020" width="40" height="40"      alt="" aria-hidden="true" class="cloud-logo" loading="lazy" />
+            <span class="text-[11px] font-bold uppercase tracking-wider text-brand-ink2">Vultr</span>
+          </li>
+          <li class="flex flex-col items-center gap-3">
+            <img src="https://www.vectorlogo.zone/logos/ibm_cloud/ibm_cloud-icon.svg"        alt="" aria-hidden="true" class="cloud-logo" loading="lazy" />
+            <span class="text-[11px] font-bold uppercase tracking-wider text-brand-ink2">IBM Cloud</span>
+          </li>
+        </ul>
+        <p class="mt-8 text-xs text-brand-ink2 max-w-2xl mx-auto">On-prem, hybrid or fully multi-cloud — Total Uptime sits in front of all of it.</p>
+      </div>
+    </section>
+
+    <!-- ════════ FEATURES ════════ -->
+    <section id="features" class="py-20 lg:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl">
+          <p class="eyebrow">We help, wherever your services are hosted.</p>
+          <h2 class="mt-3 h-section text-3xl sm:text-4xl lg:text-5xl">Control any application anywhere!</h2>
+          <p class="mt-4 text-lg text-brand-ink2 max-w-2xl">You build cutting-edge APIs, SaaS and web apps — we help deliver them. Our global platform provides the infrastructure, connectivity, security and performance needed to ensure your success.</p>
+        </div>
+
+        <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="tile tile-top">
+            <span class="cat cat-cyan"></span>
+            <h3 class="h-card mt-3 text-lg">Intelligent routing &amp; distribution</h3>
+            <p class="mt-2 text-sm text-brand-ink2">Enterprise routing and load balancing with availability at the forefront. Route traffic based on application type, performance, availability or geography.</p>
+          </div>
+          <div class="tile tile-top tile-top-coral">
+            <span class="cat cat-coral"></span>
+            <h3 class="h-card mt-3 text-lg">Web Application &amp; API Protection</h3>
+            <p class="mt-2 text-sm text-brand-ink2">Block unwanted traffic, DDoS attacks and 15 classes of application vulnerabilities — including XSS, SQL injection and zero-day exploits — at the edge of the internet.</p>
+          </div>
+          <div class="tile tile-top tile-top-mint">
+            <span class="cat cat-mint"></span>
+            <h3 class="h-card mt-3 text-lg">Multicloud Networking</h3>
+            <p class="mt-2 text-sm text-brand-ink2">Manage multicloud or multi-site connectivity with VPN tunnels and automation behind the scenes — on-prem, hybrid-cloud or multicloud, it doesn't matter where your infrastructure resides.</p>
+          </div>
+          <div class="tile tile-top tile-top-blue">
+            <span class="cat cat-blue"></span>
+            <h3 class="h-card mt-3 text-lg">Easy to deploy, simple to use</h3>
+            <p class="mt-2 text-sm text-brand-ink2">Configure and protect applications in minutes with an easy-to-use panel and wizards. 24×7×365 support is included — including setup.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ PRODUCT SPLIT ════════ -->
+    <section class="surface-sky-soft border-y border-brand-line py-20 lg:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <p class="eyebrow">REST API comes standard</p>
+          <h2 class="mt-3 h-section text-3xl sm:text-4xl">Designed for Developers too.</h2>
+          <p class="mt-4 text-lg text-brand-ink2">Total Uptime's REST API allows you to skip the UI, build your own, or simply automate and fit our features into your workflow. Almost all of the data and functionality within our UI is accessible through the API, so the possibilities are endless.</p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="#" class="btn btn-secondary">Check our API dox</a>
+            <a href="#" class="btn btn-ghost">View example workflows</a>
+          </div>
+          <ul class="mt-8 space-y-3 text-brand-ink">
+            <li class="flex gap-3"><span class="text-brand-blue font-extrabold">✓</span> In-depth documentation and how-to articles.</li>
+            <li class="flex gap-3"><span class="text-brand-blue font-extrabold">✓</span> Full coverage of DNS, failover and monitors.</li>
+            <li class="flex gap-3"><span class="text-brand-blue font-extrabold">✓</span> Almost all UI data and functions exposed.</li>
+          </ul>
+        </div>
+
+        <!-- Code-feel card -->
+        <div class="rounded-2xl bg-brand-blue9 text-white p-6 sm:p-8 font-mono text-[13px] leading-relaxed">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="w-2.5 h-2.5 rounded-full bg-brand-coral"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-brand-mint"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-brand-cyan"></span>
+            <span class="ml-3 text-xs text-white/60">curl · failover pool</span>
+          </div>
+<pre class="whitespace-pre-wrap text-white/95"><span class="text-brand-cyan">$ curl</span> -X POST https://api.totaluptime.com/v2/pools \
+  -H <span class="text-brand-mint">"Authorization: Bearer $TU_TOKEN"</span> \
+  -d <span class="text-brand-mint">'{
+    "name": "checkout-prod",
+    "monitors": ["http-200"],
+    "members": [
+      {"ip": "203.0.113.10", "weight": 1},
+      {"ip": "203.0.113.11", "weight": 1}
+    ],
+    "failover": "sequential"
+  }'</span></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ STATS BAND ════════ -->
+    <section class="py-20 lg:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto">
+          <p class="eyebrow">The network for cloud integration</p>
+          <h2 class="mt-3 h-section text-3xl sm:text-4xl">Global Scale. Enterprise Grade.</h2>
+        </div>
+        <div class="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+          <div><div class="text-4xl sm:text-5xl font-extrabold text-brand-cyan">100%</div><p class="mt-2 text-sm text-brand-ink2 font-semibold">Uptime SLA</p></div>
+          <div><div class="text-4xl sm:text-5xl font-extrabold text-brand-cyan">24/7/365</div><p class="mt-2 text-sm text-brand-ink2 font-semibold">Phone &amp; email support</p></div>
+          <div><div class="text-4xl sm:text-5xl font-extrabold text-brand-cyan">6 yrs</div><p class="mt-2 text-sm text-brand-ink2 font-semibold">Uninterrupted DNS service</p></div>
+          <div><div class="text-4xl sm:text-5xl font-extrabold text-brand-cyan">SOC2 II</div><p class="mt-2 text-sm text-brand-ink2 font-semibold">Type 2 certified</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ ABOUT / CTA BAND ════════ -->
+    <section class="surface-sky py-16">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8 items-center justify-between">
+        <div class="max-w-2xl">
+          <p class="eyebrow">About Total Uptime Technologies</p>
+          <h2 class="mt-2 h-section text-2xl sm:text-3xl">So you can focus on what you do best — software development.</h2>
+          <p class="mt-3 text-brand-ink2">Delivering APIs, SaaS or any other web application to a global audience using traditional cloud platforms isn't easy. Total Uptime specializes in helping leading API and SaaS organizations by providing all of the tools necessary to deliver their application.</p>
+        </div>
+        <div class="flex gap-3 shrink-0">
+          <a href="#" class="btn btn-primary text-base px-6 py-3">Start a free trial</a>
+          <a href="#" class="btn btn-ghost text-base px-6 py-3">Learn more about us</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ════════ FOOTER ════════ -->
+  <footer class="surface-blue">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 grid md:grid-cols-2 lg:grid-cols-5 gap-10">
+      <div class="lg:col-span-2">
+        <div class="flex items-center">
+          <img src="assets/tu-logo-dark.svg" alt="Total Uptime" class="h-10 w-auto" />
+        </div>
+        <p class="mt-4 text-sm text-white/80 max-w-sm">The API and SaaS Cloud. Availability, security, performance &amp; infrastructure for critical web apps.</p>
+        <div class="mt-5 flex gap-2">
+          <a href="#" class="btn btn-primary">Start free trial</a>
+        </div>
+      </div>
+      <div>
+        <p class="eyebrow text-brand-cyan mb-3">Products</p>
+        <ul class="space-y-2 text-sm">
+          <li><a href="cloud-dns-service.html" class="footer-link">Cloud DNS Service</a></li>
+          <li><a href="#" class="footer-link">Cloud Load Balancing</a></li>
+          <li><a href="#" class="footer-link">Global Server LB</a></li>
+          <li><a href="#" class="footer-link">Web App &amp; API Protection</a></li>
+          <li><a href="#" class="footer-link">Multicloud Networking</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="eyebrow text-brand-cyan mb-3">Company</p>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="footer-link">Our company</a></li>
+          <li><a href="#" class="footer-link">Our cloud platform</a></li>
+          <li><a href="#" class="footer-link">Customers</a></li>
+          <li><a href="#" class="footer-link">Partners</a></li>
+          <li><a href="#" class="footer-link">Careers</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="eyebrow text-brand-cyan mb-3">Resources</p>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="footer-link">Knowledge base</a></li>
+          <li><a href="#" class="footer-link">API documentation</a></li>
+          <li><a href="#" class="footer-link">Blog</a></li>
+          <li><a href="#" class="footer-link">Status</a></li>
+          <li><a href="#" class="footer-link">Support</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/10">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between text-xs text-white/70">
+        <span>© Total Uptime Technologies. All rights reserved.</span>
+        <span>SOC 2 Type II · 100% uptime SLA · Six years of uninterrupted DNS</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

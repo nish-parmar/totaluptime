@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Total Uptime — Mobile preview · full-length</title>
+  <meta name="description" content="The entire homepage and entire DNS page, rendered at 375 px width. Full scroll length, side-by-side." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="dist/tailwind.css" />
+  <style>
+    body { background: #EFF3F7; }
+
+    /* Column wrapper — holds one full-length mobile render */
+    .mob-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    /* Sticky tag — always shows which page is being viewed as you scroll */
+    .mob-tag {
+      position: sticky;
+      top: 80px;
+      z-index: 20;
+      background: var(--tu-blue);
+      color: white;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 999px;
+      box-shadow: 0 6px 16px -4px rgba(20, 31, 54, .25);
+      margin-bottom: 14px;
+      white-space: nowrap;
+    }
+
+    /* Phone "device" — subtle chrome so it reads as a mobile render
+     * without imposing a fixed height. iframe inside is 375 wide,
+     * height auto-set to its full contentDocument scrollHeight via JS.
+     */
+    .mob-device {
+      width: 391px;        /* 375 viewport + 8px bezel either side */
+      max-width: 100%;
+      background: #1a1f2b;
+      border-radius: 28px;
+      padding: 8px;
+      box-shadow:
+        0 10px 30px -10px rgba(20, 31, 54, .35),
+        0 30px 60px -20px rgba(20, 31, 54, .25),
+        inset 0 0 0 1.5px rgba(255, 255, 255, .06);
+    }
+
+    .mob-screen {
+      width: 375px;
+      max-width: 100%;
+      background: white;
+      border-radius: 22px;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    .mob-screen iframe {
+      width: 100%;
+      border: 0;
+      display: block;
+      /* Height set by JS — fallback gives something sensible if JS is off */
+      height: 4500px;
+    }
+
+    /* Tiny "tap to open" hint sits below each frame */
+    .mob-hint {
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--tu-ink2);
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="text-brand-ink">
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- ════════ TOP BAR ════════ -->
+  <header class="sticky top-0 z-40 bg-white border-b border-brand-line">
+    <div class="mx-auto max-w-7xl flex items-center justify-between gap-6 px-4 sm:px-6 py-3.5">
+      <a href="index.html" class="flex items-center gap-3" aria-label="Total Uptime home">
+        <img src="assets/tu-logo.svg" alt="Total Uptime" class="h-9 w-auto" />
+        <span class="hidden sm:inline text-brand-ink2 text-sm">/ Mobile preview · full-length</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-1 text-sm">
+        <a href="brand.html" class="nav-link">Brand system</a>
+        <a href="audit.html" class="nav-link">Audit</a>
+        <a href="index.html" class="nav-link">Homepage</a>
+        <a href="cloud-dns-service.html" class="nav-link">DNS</a>
+      </nav>
+      <div class="flex items-center gap-2">
+        <a href="index.html" target="_blank" rel="noopener" class="btn btn-ghost text-sm">Open homepage ↗</a>
+        <a href="cloud-dns-service.html" target="_blank" rel="noopener" class="btn btn-primary text-sm">Open DNS ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="mx-auto max-w-[1024px] px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
+
+    <!-- ════════ INTRO ════════ -->
+    <div class="max-w-3xl">
+      <p class="eyebrow">Responsive output · 375 px width · full scroll length</p>
+      <h1 class="mt-3 h-display text-3xl sm:text-4xl">Both pages, end-to-end, on mobile.</h1>
+      <p class="mt-4 text-lg text-brand-ink2">
+        The full homepage and full DNS page, each rendered at <strong>375 px width</strong>
+        and laid out at their <strong>natural full height</strong> — scroll the doc, not the
+        iframes. Side-by-side on wider screens; the labels above each render stay sticky as
+        you scroll so you always know which page you're looking at.
+      </p>
+      <p class="mt-3 text-sm text-brand-ink2">
+        Heads-up: the renders are tall (roughly 4 000 – 5 500 px each), so plan to do a fair
+        bit of scrolling. Open either in its own tab via the buttons top-right if you'd rather
+        interact with one at full screen.
+      </p>
+    </div>
+
+    <!-- ════════ TWO FULL-LENGTH MOBILE RENDERS ════════ -->
+    <div class="mt-12 grid lg:grid-cols-2 gap-x-8 gap-y-16 justify-items-center items-start">
+
+      <!-- HOMEPAGE -->
+      <div class="mob-col">
+        <span class="mob-tag">Homepage · index.html · 375 px</span>
+        <div class="mob-device">
+          <div class="mob-screen">
+            <iframe data-autoheight src="index.html" title="Homepage at mobile width" loading="lazy"></iframe>
+          </div>
+        </div>
+        <p class="mob-hint">Tap the hamburger inside the frame to test the drawer · scroll the cloud-logo strip · stat tiles re-stack into a column</p>
+      </div>
+
+      <!-- DNS PAGE -->
+      <div class="mob-col">
+        <span class="mob-tag">Cloud DNS · cloud-dns-service.html · 375 px</span>
+        <div class="mob-device">
+          <div class="mob-screen">
+            <iframe data-autoheight src="cloud-dns-service.html" title="DNS page at mobile width" loading="lazy"></iframe>
+          </div>
+        </div>
+        <p class="mob-hint">Floating "On this page" FAB stays bottom-right inside the frame · tap to open the bottom sheet · FAQs are native &lt;details&gt;</p>
+      </div>
+    </div>
+
+    <!-- ════════ NOTES ════════ -->
+    <section class="mt-16 grid sm:grid-cols-3 gap-5">
+      <div class="tile p-5">
+        <p class="eyebrow text-brand-ink2">Why iframes?</p>
+        <p class="mt-2 text-sm text-brand-ink2">No screenshots — this is the actual responsive output, the same code that ships, just rendered into a 375 px viewport.</p>
+      </div>
+      <div class="tile p-5">
+        <p class="eyebrow text-brand-ink2">Why full height?</p>
+        <p class="mt-2 text-sm text-brand-ink2">Lets you see the full page rhythm — hero → trust strip → features → REST API → stats → about — without scrolling inside a tiny window.</p>
+      </div>
+      <div class="tile p-5">
+        <p class="eyebrow text-brand-ink2">Auto-sizing</p>
+        <p class="mt-2 text-sm text-brand-ink2">JS reads the iframe's <code>contentDocument.scrollHeight</code> after load + whenever the layout reflows, then sets the iframe height to match. <code>ResizeObserver</code> catches font reflow and accordion changes.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ════════ FOOTER ════════ -->
+  <footer class="mt-16 surface-blue">
+    <div class="mx-auto max-w-[1024px] px-4 sm:px-6 lg:px-8 py-10 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between text-sm">
+      <span class="text-white/80">© Total Uptime — full-length mobile preview frame.</span>
+      <a href="brand.html" class="text-brand-cyan font-bold hover:text-white">Back to brand system →</a>
+    </div>
+  </footer>
+
+  <script>
+    /* Auto-size every iframe[data-autoheight] to its content's full height.
+     * Works because everything is same-origin (served from localhost:8000),
+     * so contentDocument is accessible. Re-runs on font reflow, Alpine init,
+     * and any future layout change via ResizeObserver. */
+    function autoSize(iframe) {
+      let observer = null;
+      const forceHideDrawer = (doc) => {
+        /* Belt-and-braces: if Alpine ever fails to init or hasn't yet, kill
+         * any modal/drawer that would otherwise cover the page in the preview. */
+        try {
+          doc.querySelectorAll('[role="dialog"][aria-modal="true"]').forEach((el) => {
+            el.style.display = 'none';
+          });
+        } catch (_) {}
+      };
+      const adjust = () => {
+        try {
+          const doc = iframe.contentDocument;
+          if (!doc || !doc.documentElement) return;
+          forceHideDrawer(doc);
+          const h = Math.max(
+            doc.body ? doc.body.scrollHeight : 0,
+            doc.documentElement.scrollHeight,
+            doc.documentElement.offsetHeight
+          );
+          if (h > 0) iframe.style.height = h + 'px';
+        } catch (_) { /* same-origin so should never throw */ }
+      };
+      iframe.addEventListener('load', () => {
+        adjust();
+        /* Re-measure after web-font reflow + Alpine.js init */
+        setTimeout(adjust, 120);
+        setTimeout(adjust, 400);
+        setTimeout(adjust, 1200);
+        try {
+          observer && observer.disconnect();
+          observer = new ResizeObserver(adjust);
+          observer.observe(iframe.contentDocument.documentElement);
+        } catch (_) {}
+      });
+    }
+    document.querySelectorAll('iframe[data-autoheight]').forEach(autoSize);
+    /* If you resize the viewport (column width change), re-measure */
+    window.addEventListener('resize', () => {
+      document.querySelectorAll('iframe[data-autoheight]').forEach((f) => {
+        try {
+          const doc = f.contentDocument;
+          if (!doc) return;
+          f.style.height = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight) + 'px';
+        } catch (_) {}
+      });
+    });
+  </script>
+</body>
+</html>

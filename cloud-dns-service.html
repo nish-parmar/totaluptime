@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Cloud DNS Service — Total Uptime®</title>
+  <meta name="description" content="A complete, independent DNS solution delivered from our global network — proven by six years of uninterrupted service." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="dist/tailwind.css" />
+  <!-- site.js MUST execute before alpine.js boots so Alpine.data() registrations
+       (mobileNav, megaNav, onThisPage) exist by the time Alpine scans the DOM. -->
+  <script defer src="assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body x-data>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- ════════ HEADER (same as homepage) ════════ -->
+  <header x-data="megaNav()" @keydown.escape.window="closeAll()" class="sticky top-0 z-40 bg-white border-b border-brand-line">
+    <div class="hidden lg:block surface-sky-soft">
+      <div class="mx-auto max-w-7xl flex items-center justify-end gap-6 px-6 text-xs text-brand-ink2">
+        <a href="#" class="py-2 hover:text-brand-cyan">Status</a>
+        <a href="#" class="py-2 hover:text-brand-cyan">Support</a>
+        <a href="#" class="py-2 hover:text-brand-cyan">Login</a>
+      </div>
+    </div>
+    <div class="mx-auto max-w-7xl flex items-center justify-between gap-6 px-4 sm:px-6 py-3.5">
+      <a href="index.html" class="flex items-center" aria-label="Total Uptime home">
+        <img src="assets/tu-logo.svg" alt="Total Uptime" class="h-9 w-auto" />
+      </a>
+      <nav class="hidden lg:flex items-center gap-1 text-[15px]" aria-label="Primary">
+        <div class="relative" @mouseenter="open('products')" @mouseleave="close('products')">
+          <button class="nav-link inline-flex items-center gap-1" :aria-expanded="active==='products'" @click="toggle('products')">
+            Products
+            <svg class="w-3.5 h-3.5 text-brand-ink2 transition-transform" :class="active==='products' && 'rotate-180'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div x-show="active==='products'" x-transition.opacity x-cloak class="mega" @click.away="closeAll()">
+            <div class="grid grid-cols-3 gap-x-8 gap-y-2">
+              <div>
+                <div class="flex items-center gap-2 mb-2"><span class="cat cat-cyan"></span><p class="eyebrow eyebrow-blue text-brand-ink2">Application delivery</p></div>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">ADC as a Service</span></a>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">Cloud Load Balancing</span></a>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">Global Server Load Balancing</span></a>
+              </div>
+              <div>
+                <div class="flex items-center gap-2 mb-2"><span class="cat cat-mint"></span><p class="eyebrow eyebrow-blue text-brand-ink2">DNS services</p></div>
+                <a href="cloud-dns-service.html" class="block py-2 px-3 rounded-lg bg-brand-sky2"><span class="block text-sm font-semibold text-brand-cyan">Cloud DNS Service</span><span class="block text-xs text-brand-ink2">You're here</span></a>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">Protective DNS</span></a>
+              </div>
+              <div>
+                <div class="flex items-center gap-2 mb-2"><span class="cat cat-coral"></span><p class="eyebrow eyebrow-blue text-brand-ink2">Network &amp; security</p></div>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">Multicloud Networking</span></a>
+                <a href="#" class="block py-2 px-3 rounded-lg hover:bg-brand-sky2"><span class="block text-sm font-semibold text-brand-blue">Web App &amp; API Protection</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a href="#" class="nav-link">Solutions</a>
+        <a href="#" class="nav-link">Pricing</a>
+        <a href="#" class="nav-link">Resources</a>
+        <a href="#" class="nav-link">Company</a>
+      </nav>
+      <div class="hidden lg:flex items-center gap-2">
+        <a href="#" class="btn btn-ghost">Sign in</a>
+        <a href="#" class="btn btn-primary">Start free trial</a>
+      </div>
+      <button @click="$dispatch('toggle-mobile-nav')" class="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-lg text-brand-blue hover:bg-brand-sky2" aria-label="Open menu">
+        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ════════ MOBILE DRAWER (same as homepage) ════════ -->
+  <div x-data="mobileNav()" @toggle-mobile-nav.window="toggle()" x-show="open" x-cloak style="display:none" class="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+    <div x-show="open" x-cloak x-transition.opacity @click="close()" class="fixed inset-0 bg-brand-blue9/60 backdrop-blur-sm"></div>
+    <div
+      x-show="open"
+      x-cloak
+      x-transition:enter="transition ease-out duration-300" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
+      x-transition:leave="transition ease-in duration-200"  x-transition:leave-start="translate-x-0"   x-transition:leave-end="translate-x-full"
+      class="fixed inset-y-0 right-0 w-full max-w-sm bg-white flex flex-col">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-brand-line">
+        <span class="font-bold text-brand-blue">Menu</span>
+        <button @click="close()" class="w-10 h-10 inline-flex items-center justify-center rounded-lg hover:bg-brand-sky2" aria-label="Close menu">
+          <svg class="w-6 h-6 text-brand-ink2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <nav class="flex-1 overflow-y-auto p-3 space-y-1" aria-label="Mobile primary">
+        <div>
+          <button @click="expand('p')" :aria-expanded="!!expanded.p" class="w-full flex items-center justify-between px-3 py-3 rounded-lg hover:bg-brand-sky2">
+            <span class="flex items-center gap-2 font-semibold text-brand-blue"><span class="cat cat-cyan"></span> Products</span>
+            <svg class="w-4 h-4 text-brand-ink2 transition-transform" :class="expanded.p && 'rotate-180'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div x-show="expanded.p" x-collapse class="pl-5 pr-2 pb-2">
+            <p class="eyebrow text-brand-ink2 mt-3 mb-1">Application delivery</p>
+            <a href="#" @click="close()" class="block py-2 text-sm text-brand-blue font-semibold">ADC as a Service</a>
+            <a href="#" @click="close()" class="block py-2 text-sm text-brand-blue font-semibold">Cloud Load Balancing</a>
+            <a href="#" @click="close()" class="block py-2 text-sm text-brand-blue font-semibold">Global Server LB</a>
+            <p class="eyebrow text-brand-ink2 mt-3 mb-1">DNS services</p>
+            <a href="cloud-dns-service.html" @click="close()" class="block py-2 text-sm text-brand-cyan font-bold">Cloud DNS Service ← you're here</a>
+            <a href="#" @click="close()" class="block py-2 text-sm text-brand-blue font-semibold">Protective DNS</a>
+            <p class="eyebrow text-brand-ink2 mt-3 mb-1">Network &amp; security</p>
+            <a href="#" @click="close()" class="block py-2 text-sm text-brand-blue font-semibold">Multicloud Networking</a>
+            <a href="#" @click="close()" class="block py-2 text-sm text-brand-blue font-semibold">Web App &amp; API Protection</a>
+          </div>
+        </div>
+        <a href="#" @click="close()" class="block px-3 py-3 font-semibold text-brand-blue rounded-lg hover:bg-brand-sky2"><span class="inline-flex items-center gap-2"><span class="cat cat-mint"></span> Solutions</span></a>
+        <a href="#" @click="close()" class="block px-3 py-3 font-semibold text-brand-blue rounded-lg hover:bg-brand-sky2"><span class="inline-flex items-center gap-2"><span class="cat cat-coral"></span> Pricing</span></a>
+        <a href="#" @click="close()" class="block px-3 py-3 font-semibold text-brand-blue rounded-lg hover:bg-brand-sky2"><span class="inline-flex items-center gap-2"><span class="cat cat-blue"></span> Resources</span></a>
+        <a href="#" @click="close()" class="block px-3 py-3 font-semibold text-brand-blue rounded-lg hover:bg-brand-sky2"><span class="inline-flex items-center gap-2"><span class="cat cat-blue"></span> Company</span></a>
+        <div class="px-3 py-3 mt-2 surface-sky-soft rounded-xl text-xs text-brand-ink2 space-y-1">
+          <a href="#" class="block py-1.5 hover:text-brand-blue">Status</a>
+          <a href="#" class="block py-1.5 hover:text-brand-blue">Support</a>
+        </div>
+      </nav>
+      <div class="border-t border-brand-line p-3 flex gap-2 bg-white">
+        <a href="#" @click="close()" class="btn btn-primary flex-1 justify-center">Start free trial</a>
+        <a href="#" @click="close()" class="btn btn-ghost flex-1 justify-center">Sign in</a>
+      </div>
+    </div>
+  </div>
+
+  <main id="main">
+    <!-- ════════ HERO ════════ -->
+    <section id="overview" class="surface-cyan">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 text-white">
+        <div class="flex items-center gap-2 text-white/85 text-sm">
+          <a href="index.html" class="hover:text-white">Home</a>
+          <span class="opacity-50">/</span>
+          <a href="#" class="hover:text-white">Products</a>
+          <span class="opacity-50">/</span>
+          <span class="font-semibold">Cloud DNS Service</span>
+        </div>
+        <p class="eyebrow mt-4" style="color: rgba(255,255,255,.85)">DNS + Traffic Management + Monitoring + Failover</p>
+        <h1 class="mt-3 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.05] tracking-tight max-w-4xl">
+          Comprehensive DNS<br /><span class="text-brand-sky">Infrastructure Platform.</span>
+        </h1>
+        <p class="mt-5 text-lg max-w-3xl text-white/90">
+          When there's a major outage, the industry joke is that it's always &ldquo;the DNS.&rdquo; It's funny until it isn't — DNS is critical infrastructure. Total Uptime provides a complete, independent DNS solution delivered from our global network — proven by six years of uninterrupted service — when 100% uptime is the only option.
+        </p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href="#" class="btn btn-primary text-base px-6 py-3">Start free trial →</a>
+          <a href="#features" class="btn btn-ghost-light text-base px-6 py-3">Explore platform</a>
+        </div>
+
+        <dl class="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="rounded-xl bg-white/10 border border-white/10 p-4"><dt class="text-xs text-white/70 uppercase tracking-wider font-bold">Uptime SLA</dt><dd class="mt-1 text-2xl font-extrabold">100%</dd></div>
+          <div class="rounded-xl bg-white/10 border border-white/10 p-4"><dt class="text-xs text-white/70 uppercase tracking-wider font-bold">Phone &amp; email support</dt><dd class="mt-1 text-2xl font-extrabold">24/7/365</dd></div>
+          <div class="rounded-xl bg-white/10 border border-white/10 p-4"><dt class="text-xs text-white/70 uppercase tracking-wider font-bold">Monitor types built-in</dt><dd class="mt-1 text-2xl font-extrabold">6</dd></div>
+          <div class="rounded-xl bg-white/10 border border-white/10 p-4"><dt class="text-xs text-white/70 uppercase tracking-wider font-bold">Add-ons required</dt><dd class="mt-1 text-2xl font-extrabold">0</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ════════ ON-THIS-PAGE — desktop pill row + mobile floating fab ════════ -->
+    <div x-data="onThisPage(['overview','features','how-it-works','comparison','pricing','faq'])">
+
+      <!-- DESKTOP: sticky pill row -->
+      <nav class="hidden lg:block sticky top-[72px] z-30 bg-brand-sky2/90 backdrop-blur border-b border-brand-line" aria-label="On this page">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+          <div class="otp-rail">
+            <a href="#overview"     @click="goTo('overview', $event)"     :class="active==='overview'    && 'is-active'" class="otp-rail-link">Overview</a>
+            <a href="#features"     @click="goTo('features', $event)"     :class="active==='features'    && 'is-active'" class="otp-rail-link">Features</a>
+            <a href="#how-it-works" @click="goTo('how-it-works', $event)" :class="active==='how-it-works'&& 'is-active'" class="otp-rail-link">How it works</a>
+            <a href="#comparison"   @click="goTo('comparison', $event)"   :class="active==='comparison'  && 'is-active'" class="otp-rail-link">Comparison</a>
+            <a href="#pricing"      @click="goTo('pricing', $event)"      :class="active==='pricing'     && 'is-active'" class="otp-rail-link">Pricing</a>
+            <a href="#faq"          @click="goTo('faq', $event)"          :class="active==='faq'         && 'is-active'" class="otp-rail-link">FAQ</a>
+          </div>
+          <a href="#" class="btn btn-primary text-sm">Start free trial →</a>
+        </div>
+      </nav>
+
+      <!-- MOBILE: floating "On this page" pill — replaces the old broken sticky subnav -->
+      <button
+        type="button"
+        @click="openSheet()"
+        :aria-expanded="sheetOpen"
+        aria-controls="otp-sheet"
+        class="otp-fab lg:hidden">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 12h10M4 18h16"/></svg>
+        <span>On this page</span>
+        <svg class="w-3.5 h-3.5 otp-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 15 6-6 6 6"/></svg>
+      </button>
+
+      <!-- Bottom sheet -->
+      <template x-teleport="body">
+        <div x-show="sheetOpen" x-cloak class="lg:hidden">
+          <div x-show="sheetOpen" x-transition.opacity @click="closeSheet()" class="otp-sheet-backdrop"></div>
+          <div
+            id="otp-sheet"
+            role="dialog" aria-modal="true" aria-label="On this page"
+            x-show="sheetOpen"
+            x-transition:enter="transition ease-out duration-200" x-transition:enter-start="translate-y-full" x-transition:enter-end="translate-y-0"
+            x-transition:leave="transition ease-in duration-150"  x-transition:leave-start="translate-y-0"   x-transition:leave-end="translate-y-full"
+            class="otp-sheet">
+            <div class="otp-grab"></div>
+            <p class="eyebrow text-brand-ink2 px-2 pb-2">On this page</p>
+            <a href="#overview"     @click="goTo('overview', $event)"     :class="active==='overview'    && 'is-active'" class="otp-item">Overview <span aria-hidden="true">›</span></a>
+            <a href="#features"     @click="goTo('features', $event)"     :class="active==='features'    && 'is-active'" class="otp-item">Features <span aria-hidden="true">›</span></a>
+            <a href="#how-it-works" @click="goTo('how-it-works', $event)" :class="active==='how-it-works'&& 'is-active'" class="otp-item">How it works <span aria-hidden="true">›</span></a>
+            <a href="#comparison"   @click="goTo('comparison', $event)"   :class="active==='comparison'  && 'is-active'" class="otp-item">Comparison <span aria-hidden="true">›</span></a>
+            <a href="#pricing"      @click="goTo('pricing', $event)"      :class="active==='pricing'     && 'is-active'" class="otp-item">Pricing <span aria-hidden="true">›</span></a>
+            <a href="#faq"          @click="goTo('faq', $event)"          :class="active==='faq'         && 'is-active'" class="otp-item">FAQ <span aria-hidden="true">›</span></a>
+            <div class="pt-4 pb-2 flex gap-2">
+              <a href="#" @click="closeSheet()" class="btn btn-primary flex-1 justify-center">Start free trial</a>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <!-- ════════ FEATURES (four pillars) ════════ -->
+    <section id="features" class="py-20 lg:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl">
+          <p class="eyebrow">Four pillars of DNS infrastructure</p>
+          <h2 class="mt-3 h-section text-3xl sm:text-4xl">Every component works together.</h2>
+          <p class="mt-4 text-lg text-brand-ink2 max-w-2xl">Monitoring triggers failover. Failover updates DNS. DNS routes traffic. No glue scripts, no extra vendors.</p>
+        </div>
+        <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <article class="tile tile-top">
+            <span class="cat cat-cyan"></span>
+            <h3 class="h-card mt-3 text-lg">Authoritative DNS</h3>
+            <p class="mt-2 text-sm text-brand-ink2">Global anycast hosting with DNSSEC, IPv6, reverse DNS, custom TTL (60s–1y), and zone import/export tools.</p>
+          </article>
+          <article class="tile tile-top tile-top-mint">
+            <span class="cat cat-mint"></span>
+            <h3 class="h-card mt-3 text-lg">Traffic management</h3>
+            <p class="mt-2 text-sm text-brand-ink2">Failover pools, round-robin, Geo DNS with zone- and proximity-based routing, multi-region steering.</p>
+          </article>
+          <article class="tile tile-top tile-top-coral">
+            <span class="cat cat-coral"></span>
+            <h3 class="h-card mt-3 text-lg">Built-in monitoring</h3>
+            <p class="mt-2 text-sm text-brand-ink2">Ping, HTTP, HTTPS, DNS, content-match and custom app checks — drive automatic failover decisions.</p>
+          </article>
+          <article class="tile tile-top tile-top-blue">
+            <span class="cat cat-blue"></span>
+            <h3 class="h-card mt-3 text-lg">Automated failover</h3>
+            <p class="mt-2 text-sm text-brand-ink2">Health-check-driven DNS updates, traffic shifting, manual override and auto-rejoin prevention.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ HOW IT WORKS ════════ -->
+    <section id="how-it-works" class="surface-sky-soft border-y border-brand-line py-20 lg:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl">
+          <p class="eyebrow">How it works</p>
+          <h2 class="mt-3 h-section text-3xl sm:text-4xl">Monitoring-driven DNS automation.</h2>
+          <p class="mt-4 text-lg text-brand-ink2">Unlike competitors who keep DNS and monitoring separate, Total Uptime integrates them. When a server fails, DNS updates automatically.</p>
+        </div>
+        <ol class="mt-10 grid sm:grid-cols-2 lg:grid-cols-5 gap-5 counter-reset">
+          <li class="tile">
+            <div class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-brand-cyan text-white font-extrabold inline-flex items-center justify-center">1</span><h3 class="h-card text-base">Configure pools</h3></div>
+            <p class="mt-3 text-sm text-brand-ink2">Group servers into failover pools with primary and secondary targets and assign monitors.</p>
+          </li>
+          <li class="tile">
+            <div class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-brand-cyan text-white font-extrabold inline-flex items-center justify-center">2</span><h3 class="h-card text-base">Continuous checks</h3></div>
+            <p class="mt-3 text-sm text-brand-ink2">Global vantage points monitor via Ping, HTTP, HTTPS, DNS, or custom app checks.</p>
+          </li>
+          <li class="tile">
+            <div class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-brand-cyan text-white font-extrabold inline-flex items-center justify-center">3</span><h3 class="h-card text-base">Validate failure</h3></div>
+            <p class="mt-3 text-sm text-brand-ink2">Failures are confirmed from multiple vantage points to suppress false positives.</p>
+          </li>
+          <li class="tile">
+            <div class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-brand-cyan text-white font-extrabold inline-flex items-center justify-center">4</span><h3 class="h-card text-base">DNS auto-updates</h3></div>
+            <p class="mt-3 text-sm text-brand-ink2">Records re-point to healthy infrastructure. No tickets, no human in the loop.</p>
+          </li>
+          <li class="tile">
+            <div class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-brand-cyan text-white font-extrabold inline-flex items-center justify-center">5</span><h3 class="h-card text-base">Recovery control</h3></div>
+            <p class="mt-3 text-sm text-brand-ink2">Auto-rejoin prevents premature re-addition. Admins keep full manual control.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ════════ COMPARISON ════════ -->
+    <section id="comparison" class="py-20 lg:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl">
+          <p class="eyebrow">Vs the alternatives</p>
+          <h2 class="mt-3 h-section text-3xl sm:text-4xl">No add-ons. No enterprise tier. No surprise bills.</h2>
+          <p class="mt-4 text-lg text-brand-ink2">Most providers force you to bolt on monitoring, failover and traffic management. With Total Uptime, everything's included.</p>
+        </div>
+
+        <div class="mt-10 overflow-x-auto rounded-xl border border-brand-line">
+          <table class="cmp">
+            <thead>
+              <tr>
+                <th>Capability</th>
+                <th>Total Uptime</th>
+                <th>Cloudflare</th>
+                <th>AWS Route 53</th>
+                <th>NS1</th>
+                <th>Akamai</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Authoritative DNS</td><td class="tu">Included</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+              <tr><td>DNS failover pools</td><td class="tu">Included</td><td><span class="meh">Paid add-on</span></td><td><span class="meh">Paid add-on</span></td><td><span class="check">✓</span></td><td><span class="meh">Paid add-on</span></td></tr>
+              <tr><td>Built-in health monitoring</td><td class="tu">Included</td><td><span class="meh">Limited</span></td><td><span class="meh">Limited</span></td><td><span class="meh">Limited</span></td><td><span class="meh">Limited</span></td></tr>
+              <tr><td>Geo DNS routing</td><td class="tu">Included</td><td><span class="check">✓</span></td><td><span class="meh">Paid add-on</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+              <tr><td>Secondary DNS / zone transfers</td><td class="tu">Included</td><td><span class="meh">Enterprise</span></td><td><span class="meh">Limited</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+              <tr><td>TSIG authentication</td><td class="tu">Included</td><td><span class="meh">Enterprise</span></td><td><span class="cross">—</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+              <tr><td>DNSSEC</td><td class="tu">Included</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+              <tr><td>Custom application checks</td><td class="tu">Included</td><td><span class="meh">Limited</span></td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="cross">—</span></td></tr>
+              <tr><td>Maintenance windows</td><td class="tu">Included</td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="cross">—</span></td></tr>
+              <tr><td>Auto-rejoin control</td><td class="tu">Included</td><td><span class="meh">Limited</span></td><td><span class="meh">Limited</span></td><td><span class="meh">Limited</span></td><td><span class="meh">Limited</span></td></tr>
+              <tr><td>24/7 phone support</td><td class="tu">Included</td><td><span class="meh">Enterprise</span></td><td><span class="meh">Paid add-on</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+              <tr><td>100% uptime SLA</td><td class="tu">Included</td><td><span class="meh">Enterprise</span></td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="cross">—</span></td></tr>
+              <tr><td>Predictable pricing</td><td class="tu">Flat</td><td><span class="meh">Usage</span></td><td><span class="meh">Usage</span></td><td><span class="meh">Custom</span></td><td><span class="meh">Custom</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-4 text-xs text-brand-ink2">Source: vendor public pricing pages, May 2026. &ldquo;Enterprise&rdquo; indicates the feature is gated behind an enterprise plan; &ldquo;Limited&rdquo; indicates partial support; &ldquo;Paid add-on&rdquo; indicates separate billing.</p>
+      </div>
+    </section>
+
+    <!-- ════════ PRICING ════════ -->
+    <section id="pricing" class="surface-sky-soft border-y border-brand-line py-20 lg:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid lg:grid-cols-[1fr_1.2fr] gap-12 items-center">
+        <div>
+          <p class="eyebrow">Predictable pricing</p>
+          <h2 class="mt-3 h-section text-3xl sm:text-4xl">Every feature, every plan.</h2>
+          <p class="mt-4 text-lg text-brand-ink2">No add-ons. No enterprise tier. No surprise bills. Every Cloud DNS subscription includes failover pools, monitoring, Geo DNS, secondary DNS, 24/7 phone support and a 100% uptime SLA.</p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="#" class="btn btn-primary">Start free trial</a>
+            <a href="#" class="btn btn-ghost">See full pricing</a>
+          </div>
+        </div>
+
+        <div class="tile p-8 bg-white">
+          <div class="flex items-baseline gap-2">
+            <span class="text-5xl font-extrabold text-brand-blue">$49</span>
+            <span class="text-brand-ink2 font-semibold">/ month, starting</span>
+          </div>
+          <p class="mt-3 text-sm text-brand-ink2">Authoritative DNS · failover pools · monitoring · Geo DNS · zone transfers · 24/7 phone support · 100% uptime SLA · REST API.</p>
+          <ul class="mt-6 space-y-3 text-brand-ink">
+            <li class="flex gap-3"><span class="text-brand-blue font-extrabold">✓</span> Unlimited DNS records and zones</li>
+            <li class="flex gap-3"><span class="text-brand-blue font-extrabold">✓</span> All record types (A, AAAA, CNAME, MX, TXT, NS, PTR…)</li>
+            <li class="flex gap-3"><span class="text-brand-blue font-extrabold">✓</span> DNSSEC with large DKIM key support</li>
+            <li class="flex gap-3"><span class="text-brand-blue font-extrabold">✓</span> Custom TTL from 60 seconds to 1 year</li>
+            <li class="flex gap-3"><span class="text-brand-blue font-extrabold">✓</span> RBAC and 2FA</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ FAQ ════════ -->
+    <section id="faq" class="py-20 lg:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid lg:grid-cols-[1fr_1.5fr] gap-12">
+        <div>
+          <p class="eyebrow">FAQ</p>
+          <h2 class="mt-3 h-section text-3xl sm:text-4xl">Quick answers to the questions infrastructure teams ask most.</h2>
+          <p class="mt-4 text-brand-ink2">Need more? Our team is on the phone 24/7/365 — including setup.</p>
+        </div>
+        <div class="space-y-3">
+          <details class="tile group" open>
+            <summary class="flex items-center justify-between cursor-pointer list-none">
+              <h3 class="h-card text-base">What's the difference between authoritative and comprehensive DNS?</h3>
+              <span class="text-brand-cyan font-extrabold text-xl transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <p class="mt-3 text-sm text-brand-ink2">Authoritative DNS just hosts records and answers queries — no monitoring, no failover. When a server dies, DNS keeps pointing at the dead box until someone updates it manually. Comprehensive DNS hosts the records and continuously monitors your servers; when a failure is detected, DNS auto-updates to healthy infrastructure.</p>
+          </details>
+          <details class="tile group">
+            <summary class="flex items-center justify-between cursor-pointer list-none">
+              <h3 class="h-card text-base">How does DNS failover actually work?</h3>
+              <span class="text-brand-cyan font-extrabold text-xl transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <p class="mt-3 text-sm text-brand-ink2">Health monitors detect unavailability via Ping, HTTP, HTTPS or a custom check. The DNS layer automatically removes the failed server from responses and directs traffic to healthy members of the pool. Configurable thresholds, manual overrides and maintenance windows let you stay in control.</p>
+          </details>
+          <details class="tile group">
+            <summary class="flex items-center justify-between cursor-pointer list-none">
+              <h3 class="h-card text-base">Can I run Total Uptime as a secondary DNS provider?</h3>
+              <span class="text-brand-cyan font-extrabold text-xl transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <p class="mt-3 text-sm text-brand-ink2">Yes. Full AXFR and IXFR zone transfers with TSIG authentication — run us as primary or secondary alongside an existing provider for true multi-provider redundancy.</p>
+          </details>
+          <details class="tile group">
+            <summary class="flex items-center justify-between cursor-pointer list-none">
+              <h3 class="h-card text-base">Is 24/7 phone support included?</h3>
+              <span class="text-brand-cyan font-extrabold text-xl transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <p class="mt-3 text-sm text-brand-ink2">Yes. 24/7/365 phone and email support is in every Cloud DNS subscription — not gated behind an enterprise tier.</p>
+          </details>
+          <details class="tile group">
+            <summary class="flex items-center justify-between cursor-pointer list-none">
+              <h3 class="h-card text-base">How is the 100% uptime SLA structured?</h3>
+              <span class="text-brand-cyan font-extrabold text-xl transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <p class="mt-3 text-sm text-brand-ink2">Total Uptime backs the platform with a 100% uptime SLA on DNS query response. The service has run for six consecutive years without a global outage; full SLA terms are in the MSA.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ CTA BAND ════════ -->
+    <section class="surface-sky py-16">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8 items-center justify-between">
+        <div class="max-w-2xl">
+          <h2 class="h-section text-2xl sm:text-3xl">Improve your DNS today.</h2>
+          <p class="mt-3 text-brand-ink2">[Body copy to be drafted by copywriter — placeholder so the layout reads end-to-end.]</p>
+        </div>
+        <div class="flex gap-3 shrink-0">
+          <a href="#" class="btn btn-primary text-base px-6 py-3">Start free trial</a>
+          <a href="#" class="btn btn-ghost text-base px-6 py-3">Talk to us</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ════════ FOOTER ════════ -->
+  <footer class="surface-blue">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 grid md:grid-cols-2 lg:grid-cols-5 gap-10">
+      <div class="lg:col-span-2">
+        <div class="flex items-center">
+          <img src="assets/tu-logo-dark.svg" alt="Total Uptime" class="h-10 w-auto" />
+        </div>
+        <p class="mt-4 text-sm text-white/80 max-w-sm">The API and SaaS Cloud. Availability, security, performance &amp; infrastructure for critical web apps.</p>
+        <div class="mt-5 flex gap-2"><a href="#" class="btn btn-primary">Start free trial</a></div>
+      </div>
+      <div>
+        <p class="eyebrow text-brand-cyan mb-3">Products</p>
+        <ul class="space-y-2 text-sm">
+          <li><a href="cloud-dns-service.html" class="footer-link">Cloud DNS Service</a></li>
+          <li><a href="#" class="footer-link">Cloud Load Balancing</a></li>
+          <li><a href="#" class="footer-link">Global Server LB</a></li>
+          <li><a href="#" class="footer-link">Web App &amp; API Protection</a></li>
+          <li><a href="#" class="footer-link">Multicloud Networking</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="eyebrow text-brand-cyan mb-3">Company</p>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="footer-link">Our company</a></li>
+          <li><a href="#" class="footer-link">Our cloud platform</a></li>
+          <li><a href="#" class="footer-link">Customers</a></li>
+          <li><a href="#" class="footer-link">Partners</a></li>
+          <li><a href="#" class="footer-link">Careers</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="eyebrow text-brand-cyan mb-3">Resources</p>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="footer-link">Knowledge base</a></li>
+          <li><a href="#" class="footer-link">API documentation</a></li>
+          <li><a href="#" class="footer-link">Blog</a></li>
+          <li><a href="#" class="footer-link">Status</a></li>
+          <li><a href="#" class="footer-link">Support</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/10">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between text-xs text-white/70">
+        <span>© Total Uptime Technologies. All rights reserved.</span>
+        <span>SOC 2 Type II · 100% uptime SLA · Six years of uninterrupted DNS</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

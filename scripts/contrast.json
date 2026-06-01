@@ -1,0 +1,263 @@
+[
+  {
+    "fg": "white",
+    "bg": "cyan",
+    "label": "Hero / coral / cyan surfaces — body white text",
+    "fgHex": "#FFFFFF",
+    "bgHex": "#01ADEF",
+    "ratio": 2.55,
+    "level": "FAIL"
+  },
+  {
+    "fg": "white",
+    "bg": "cyan2",
+    "label": "Cyan hover state",
+    "fgHex": "#FFFFFF",
+    "bgHex": "#0192C7",
+    "ratio": 3.54,
+    "level": "AA Large"
+  },
+  {
+    "fg": "white",
+    "bg": "blue",
+    "label": "Section headings on blue tile",
+    "fgHex": "#FFFFFF",
+    "bgHex": "#144586",
+    "ratio": 9.44,
+    "level": "AAA"
+  },
+  {
+    "fg": "white",
+    "bg": "blue9",
+    "label": "Footer / deep surfaces",
+    "fgHex": "#FFFFFF",
+    "bgHex": "#0E2F5C",
+    "ratio": 13.29,
+    "level": "AAA"
+  },
+  {
+    "fg": "white",
+    "bg": "coral",
+    "label": "Primary CTA button label",
+    "fgHex": "#FFFFFF",
+    "bgHex": "#FF5A6E",
+    "ratio": 3.03,
+    "level": "AA Large"
+  },
+  {
+    "fg": "white",
+    "bg": "coral2",
+    "label": "Primary CTA hover",
+    "fgHex": "#FFFFFF",
+    "bgHex": "#E63F55",
+    "ratio": 4.03,
+    "level": "AA Large"
+  },
+  {
+    "fg": "white",
+    "bg": "mint",
+    "label": "Mint badge",
+    "fgHex": "#FFFFFF",
+    "bgHex": "#5CC4A8",
+    "ratio": 2.12,
+    "level": "FAIL"
+  },
+  {
+    "fg": "ink",
+    "bg": "white",
+    "label": "Body text on white",
+    "fgHex": "#202020",
+    "bgHex": "#FFFFFF",
+    "ratio": 16.29,
+    "level": "AAA"
+  },
+  {
+    "fg": "ink",
+    "bg": "sky",
+    "label": "Body text on pale sky band",
+    "fgHex": "#202020",
+    "bgHex": "#DFEAF2",
+    "ratio": 13.34,
+    "level": "AAA"
+  },
+  {
+    "fg": "ink",
+    "bg": "sky2",
+    "label": "Body text on subtle hover surface",
+    "fgHex": "#202020",
+    "bgHex": "#F2F7FB",
+    "ratio": 15.11,
+    "level": "AAA"
+  },
+  {
+    "fg": "ink2",
+    "bg": "white",
+    "label": "Secondary text on white",
+    "fgHex": "#4A5562",
+    "bgHex": "#FFFFFF",
+    "ratio": 7.59,
+    "level": "AAA"
+  },
+  {
+    "fg": "ink2",
+    "bg": "sky",
+    "label": "Secondary text on pale sky band",
+    "fgHex": "#4A5562",
+    "bgHex": "#DFEAF2",
+    "ratio": 6.21,
+    "level": "AA"
+  },
+  {
+    "fg": "ink2",
+    "bg": "sky2",
+    "label": "Secondary text on subtle hover surface",
+    "fgHex": "#4A5562",
+    "bgHex": "#F2F7FB",
+    "ratio": 7.04,
+    "level": "AAA"
+  },
+  {
+    "fg": "blue",
+    "bg": "white",
+    "label": "Section headings on white",
+    "fgHex": "#144586",
+    "bgHex": "#FFFFFF",
+    "ratio": 9.44,
+    "level": "AAA"
+  },
+  {
+    "fg": "blue",
+    "bg": "sky",
+    "label": "Section headings on pale sky band",
+    "fgHex": "#144586",
+    "bgHex": "#DFEAF2",
+    "ratio": 7.72,
+    "level": "AAA"
+  },
+  {
+    "fg": "blue",
+    "bg": "sky2",
+    "label": "Section headings on subtle hover",
+    "fgHex": "#144586",
+    "bgHex": "#F2F7FB",
+    "ratio": 8.75,
+    "level": "AAA"
+  },
+  {
+    "fg": "cyan",
+    "bg": "white",
+    "label": "Cyan eyebrow / link on white",
+    "fgHex": "#01ADEF",
+    "bgHex": "#FFFFFF",
+    "ratio": 2.55,
+    "level": "FAIL"
+  },
+  {
+    "fg": "cyan",
+    "bg": "sky",
+    "label": "Cyan eyebrow on pale sky band",
+    "fgHex": "#01ADEF",
+    "bgHex": "#DFEAF2",
+    "ratio": 2.09,
+    "level": "FAIL"
+  },
+  {
+    "fg": "cyan",
+    "bg": "sky2",
+    "label": "Cyan eyebrow on subtle hover",
+    "fgHex": "#01ADEF",
+    "bgHex": "#F2F7FB",
+    "ratio": 2.37,
+    "level": "FAIL"
+  },
+  {
+    "fg": "cyan2",
+    "bg": "white",
+    "label": "Cyan hover-text on white",
+    "fgHex": "#0192C7",
+    "bgHex": "#FFFFFF",
+    "ratio": 3.54,
+    "level": "AA Large"
+  },
+  {
+    "fg": "cyan",
+    "bg": "blue9",
+    "label": "Cyan eyebrow / link on footer (deep blue)",
+    "fgHex": "#01ADEF",
+    "bgHex": "#0E2F5C",
+    "ratio": 5.21,
+    "level": "AA"
+  },
+  {
+    "fg": "cyan",
+    "bg": "blue",
+    "label": "Cyan eyebrow on brand-blue surface",
+    "fgHex": "#01ADEF",
+    "bgHex": "#144586",
+    "ratio": 3.7,
+    "level": "AA Large"
+  },
+  {
+    "fg": "coral",
+    "bg": "white",
+    "label": "Coral text on white",
+    "fgHex": "#FF5A6E",
+    "bgHex": "#FFFFFF",
+    "ratio": 3.03,
+    "level": "AA Large"
+  },
+  {
+    "fg": "coral2",
+    "bg": "white",
+    "label": "Coral hover text on white",
+    "fgHex": "#E63F55",
+    "bgHex": "#FFFFFF",
+    "ratio": 4.03,
+    "level": "AA Large"
+  },
+  {
+    "fg": "mint",
+    "bg": "white",
+    "label": "Mint tick on white",
+    "fgHex": "#5CC4A8",
+    "bgHex": "#FFFFFF",
+    "ratio": 2.12,
+    "level": "FAIL"
+  },
+  {
+    "fg": "mint",
+    "bg": "sky",
+    "label": "Mint tick on pale sky band",
+    "fgHex": "#5CC4A8",
+    "bgHex": "#DFEAF2",
+    "ratio": 1.73,
+    "level": "FAIL"
+  },
+  {
+    "fg": "sky",
+    "bg": "cyan",
+    "label": "Sky-tint accent text on cyan hero",
+    "fgHex": "#DFEAF2",
+    "bgHex": "#01ADEF",
+    "ratio": 2.09,
+    "level": "FAIL"
+  },
+  {
+    "fg": "sky",
+    "bg": "blue",
+    "label": "Sky-tint text on blue surface",
+    "fgHex": "#DFEAF2",
+    "bgHex": "#144586",
+    "ratio": 7.72,
+    "level": "AAA"
+  },
+  {
+    "fg": "sky",
+    "bg": "blue9",
+    "label": "Sky-tint text on deep blue surface",
+    "fgHex": "#DFEAF2",
+    "bgHex": "#0E2F5C",
+    "ratio": 10.88,
+    "level": "AAA"
+  }
+]

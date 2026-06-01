@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Total Uptime — Live homepage, annotated audit</title>
+  <meta name="description" content="The current live Total Uptime homepage with the audit pinned over it — every issue, every recommended change." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="dist/tailwind.css" />
+  <style>
+    body { background: #EFF3F7; }
+
+    /* ---------- Layout ---------- */
+    .annot-grid {
+      display: grid;
+      grid-template-columns: minmax(720px, 1024px) minmax(320px, 380px);
+      gap: 28px;
+      align-items: start;
+    }
+    @media (max-width: 1280px) {
+      .annot-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- Image stage ---------- */
+    .annot-stage {
+      position: relative;
+      width: 100%;
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow:
+        0 6px 20px -10px rgba(20,31,54,.18),
+        0 30px 60px -20px rgba(20,31,54,.14);
+    }
+    .annot-stage img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    /* Tag the stage so we know it's the live (= "old") site, not the reskin */
+    .annot-stage::after {
+      content: "Live · totaluptime1.wpenginepowered.com";
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(14,47,92,.78);
+      color: white;
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 4px 9px;
+      border-radius: 999px;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    /* ---------- Pin ---------- */
+    .pin {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      border: 2.5px solid white;
+      color: white;
+      font-weight: 900;
+      font-size: 12.5px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 5;
+      transition: transform .15s ease, box-shadow .15s ease;
+      font-feature-settings: "tnum";
+    }
+    .pin-critical { background: #DC2626; --pin-ring: #DC2626; }
+    .pin-brand    { background: #01ADEF; --pin-ring: #01ADEF; }
+    .pin-ux       { background: #FF5A6E; --pin-ring: #FF5A6E; }
+    .pin-add      { background: #2FA37F; --pin-ring: #2FA37F; }
+    .pin-keep     { background: #144586; --pin-ring: #144586; }
+    .pin {
+      box-shadow:
+        0 0 0 2px var(--pin-ring, #144586),
+        0 6px 14px -2px rgba(20,31,54,.4);
+    }
+    .pin:hover,
+    .pin.is-active {
+      transform: translate(-50%, -50%) scale(1.18);
+      z-index: 6;
+    }
+    .pin.is-active {
+      box-shadow:
+        0 0 0 2px var(--pin-ring, #144586),
+        0 0 0 6px color-mix(in srgb, var(--pin-ring) 25%, transparent),
+        0 8px 18px -2px rgba(20,31,54,.45);
+    }
+
+    /* ---------- Annotations sidebar ---------- */
+    .annot-side {
+      position: sticky;
+      top: 96px;
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+    .annot-side::-webkit-scrollbar         { width: 8px; }
+    .annot-side::-webkit-scrollbar-thumb   { background: #C9D2DE; border-radius: 4px; }
+    .annot-side::-webkit-scrollbar-track   { background: transparent; }
+
+    .annot-card {
+      background: white;
+      border: 1px solid var(--tu-line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+    }
+    .annot-card:hover {
+      border-color: #C9D2DE;
+      transform: translateX(-2px);
+    }
+    .annot-card.is-active {
+      border-color: var(--tu-blue);
+      box-shadow: 0 4px 14px -4px rgba(20,69,134,.22);
+    }
+    .annot-card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .annot-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 22px; height: 22px; border-radius: 999px;
+      color: white; font-weight: 900; font-size: 11px;
+      flex-shrink: 0; font-feature-settings: "tnum";
+    }
+    .annot-num.critical { background: #DC2626; }
+    .annot-num.brand    { background: #01ADEF; }
+    .annot-num.ux       { background: #FF5A6E; }
+    .annot-num.add      { background: #2FA37F; }
+    .annot-num.keep     { background: #144586; }
+
+    .annot-kind {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+    .annot-kind.critical { background: #FBDCE0; color: #8C1A2A; }
+    .annot-kind.brand    { background: #D6F1FE; color: #016A93; }
+    .annot-kind.ux       { background: #FBDCE0; color: #B0263A; }
+    .annot-kind.add      { background: #DCF0E9; color: #1F6E55; }
+    .annot-kind.keep     { background: #DCE7F5; color: #144586; }
+
+    .annot-title { font-weight: 800; color: var(--tu-blue); font-size: 14px; line-height: 1.3; }
+    .annot-fix   { color: var(--tu-ink2); font-size: 13px; line-height: 1.5; margin-top: 6px; }
+    .annot-fix strong { color: var(--tu-blue); }
+
+    /* ---------- Legend ---------- */
+    .legend-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px; border-radius: 999px;
+      background: white; border: 1px solid var(--tu-line);
+      font-size: 12px; font-weight: 700; color: var(--tu-blue);
+    }
+    .legend-dot { width: 12px; height: 12px; border-radius: 999px; }
+
+    /* ---------- Optional debug grid (?debug=1) ---------- */
+    .annot-stage.is-debug { background: white; }
+    .annot-stage.is-debug img { opacity: .5; }
+    .grid-overlay {
+      position: absolute; inset: 0; pointer-events: none; z-index: 2;
+      background-image:
+        linear-gradient(to right, rgba(220,38,38,.18) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(220,38,38,.18) 1px, transparent 1px);
+      background-size: 10% 5%;
+    }
+    .coord-readout {
+      position: fixed; bottom: 16px; left: 16px;
+      background: rgba(14,47,92,.92); color: white;
+      font-family: ui-monospace, monospace; font-size: 12px;
+      padding: 6px 10px; border-radius: 6px; z-index: 50;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="text-brand-ink">
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- ════════ TOP BAR ════════ -->
+  <header class="sticky top-0 z-40 bg-white border-b border-brand-line">
+    <div class="mx-auto max-w-[1432px] flex items-center justify-between gap-6 px-6 py-3.5">
+      <a href="index.html" class="flex items-center gap-3" aria-label="Total Uptime home">
+        <img src="assets/tu-logo.svg" alt="Total Uptime" class="h-9 w-auto" />
+        <span class="hidden sm:inline text-brand-ink2 text-sm">/ Live homepage annotated</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-1 text-sm">
+        <a href="brand.html" class="nav-link">Brand system</a>
+        <a href="audit.html" class="nav-link">Audit</a>
+        <a href="homepage-annotated.html" class="nav-link">Reskin annotated</a>
+      </nav>
+      <div class="flex items-center gap-2">
+        <a href="https://totaluptime1.wpenginepowered.com/" target="_blank" rel="noopener" class="btn btn-ghost text-sm">Open live site ↗</a>
+        <a href="index.html" target="_blank" rel="noopener" class="btn btn-primary text-sm">View reskin ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="mx-auto max-w-[1432px] px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
+
+    <!-- ════════ INTRO ════════ -->
+    <div class="max-w-4xl">
+      <p class="eyebrow">Audit walkthrough · live Total Uptime homepage</p>
+      <h1 class="mt-3 h-display text-3xl sm:text-4xl">Every issue, pinned to the page.</h1>
+      <p class="mt-4 text-lg text-brand-ink2">
+        Below is the current <em>live</em> Total Uptime homepage — captured at desktop width —
+        with a numbered pin on every issue the audit raised, plus the patterns we want to add.
+        Click a pin (or any card on the right) to highlight the matching annotation. Pair this
+        with the <a href="homepage-annotated.html" class="text-brand-blue font-bold underline">reskin annotated</a>
+        view to show before/after side by side.
+      </p>
+
+      <div class="mt-6 flex flex-wrap gap-2.5">
+        <span class="legend-pill"><span class="legend-dot" style="background:#DC2626"></span> Critical · must fix</span>
+        <span class="legend-pill"><span class="legend-dot" style="background:#01ADEF"></span> Brand · misaligned</span>
+        <span class="legend-pill"><span class="legend-dot" style="background:#FF5A6E"></span> UX · hierarchy / friction</span>
+        <span class="legend-pill"><span class="legend-dot" style="background:#2FA37F"></span> Add · opportunity</span>
+        <span class="legend-pill"><span class="legend-dot" style="background:#144586"></span> Keep · already strong</span>
+      </div>
+    </div>
+
+    <!-- ════════ TWO-COLUMN: IMAGE STAGE + ANNOTATION SIDEBAR ════════ -->
+    <div class="annot-grid mt-12">
+
+      <!-- Image stage with pins overlaid -->
+      <div class="annot-stage" id="stage">
+        <img src="assets/tu-old-homepage.png" alt="Live Total Uptime homepage screenshot, full page" id="page" />
+        <!-- Pins appended by JS -->
+      </div>
+
+      <!-- Annotations sidebar -->
+      <aside class="annot-side" id="cards">
+        <!-- Cards rendered by JS -->
+      </aside>
+    </div>
+  </main>
+
+  <!-- ════════ FOOTER ════════ -->
+  <footer class="mt-16 surface-blue">
+    <div class="mx-auto max-w-[1432px] px-4 sm:px-6 lg:px-8 py-10 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between text-sm">
+      <span class="text-white/80">© Total Uptime — annotated live-homepage audit.</span>
+      <a href="brand.html" class="text-brand-cyan font-bold hover:text-white">Back to brand system →</a>
+    </div>
+  </footer>
+
+  <script>
+    /* ────────────────────────────────────────────────────────────────
+     * Annotation registry.
+     * Coordinates are expressed as percentages of the underlying
+     * screenshot (1280 × 6837), so they scale at any container width.
+     * Use ?debug=1 in the URL to overlay a 10% × 5% grid and a live
+     * cursor read-out — handy for fine-tuning positions.
+     * ──────────────────────────────────────────────────────────────── */
+    const ANNOTATIONS = [
+      { kind: 'critical', x: 89, y: 0.5,
+        title: 'Mobile menu is broken',
+        fix: 'Client\'s flagged issue from day one — the hamburger fails on mobile. <strong>Fix:</strong> full-height drawer with accordion, sticky FAB CTA, and a proper close affordance. Shipped on both pages of the reskin.' },
+
+      { kind: 'keep', x: 55, y: 0.6,
+        title: 'Desktop mega menu is sound — keep the pattern',
+        fix: 'The live site already runs a 3-column mega menu (Application delivery / DNS / Network &amp; security) with per-item descriptions and a "view all" link. <strong>Keep:</strong> we reused the exact same structure in the reskin. <strong>Restyle only:</strong> chip-coded category eyebrows (cyan / mint / coral) so the categories carry visual signal, not just text. The client\'s "menu" complaint was about <em>mobile</em> — see pin 1.' },
+
+      { kind: 'ux', x: 96, y: 0.6,
+        title: 'Two competing primary CTAs in different colours',
+        fix: 'Cyan <strong>Contact us</strong> (top-right) and green <strong>Book a demo</strong> (floating mid-hero) are both visually primary, in colours that aren\'t part of any system, doing essentially the same job — route the user to sales. <strong>Fix:</strong> one coral primary per region, ghost secondary for any second action. Pick one — promote it, demote the other.' },
+
+      { kind: 'brand', x: 50, y: 4.5,
+        title: 'Generic mid-blue hero',
+        fix: '<code>#1f6ab5</code> is the safe enterprise-blue you see everywhere in this category. <strong>Fix:</strong> Edgenexus electric cyan <code>#01ADEF</code> — same "I\'m on a hero" signal, instant category differentiation.' },
+
+      { kind: 'ux', x: 30, y: 6.2,
+        title: 'Weak hero hierarchy',
+        fix: 'Sub-headline weight + colour competes with the H1; no eyebrow to frame the promise. <strong>Fix:</strong> Montserrat scale, eyebrow + h-display + restrained sub-copy so the brand promise lands in one beat.' },
+
+      { kind: 'add', x: 78, y: 6.6,
+        title: 'Hero peripheral vision is empty',
+        fix: 'TU\'s most quotable figures — <strong>100% DNS uptime</strong>, <strong>24/7/365 support</strong>, <strong>0 add-ons required</strong> — are buried below the fold. <strong>Add:</strong> overlapping stat cluster surfaced in the hero.' },
+
+      { kind: 'add', x: 50, y: 9.7,
+        title: 'Trust strip is undersized',
+        fix: 'Cloud-provider compatibility is a major differentiator but rendered as a thin line of icons. <strong>Add:</strong> full-width trust strip with 7 monochrome logos, full-colour on hover, capped width.' },
+
+      { kind: 'ux', x: 70, y: 14.0,
+        title: 'No eyebrow — flat type rhythm',
+        fix: 'Every H2 hits the same way: no eyebrow, no surface shift, no rhythm. <strong>Fix:</strong> eyebrow + h-section + h-card system so the page reads as deliberately structured, not a list.' },
+
+      { kind: 'brand', x: 26, y: 14.5,
+        title: 'Product screenshots feel dated',
+        fix: 'Real screenshots are valuable but the framing is browser-chrome circa 2014. <strong>Phase 2:</strong> line-art system + custom stick-figure illustration + mascot (per brief) to give product moments distinct voice.' },
+
+      { kind: 'add', x: 70, y: 22.0,
+        title: 'No category coding for products',
+        fix: 'Every product section looks identical — nothing signals "this is networking" vs "this is security". <strong>Add:</strong> 4-colour code (cyan / coral / mint / blue) repeated in tile borders, mega-menu chips and pricing tables.' },
+
+      { kind: 'ux', x: 75, y: 30.5,
+        title: 'Decorative charts carry no signal',
+        fix: 'Pie chart + circle diagrams are decorative, not informative — they don\'t teach what the product does. <strong>Phase 2:</strong> replace with line-art that conveys the actual benefit (DDoS blocked, routes optimised, failover triggered).' },
+
+      { kind: 'critical', x: 22, y: 24.0,
+        title: 'Body text fails WCAG contrast',
+        fix: 'Low-sat mint / cyan body links fail the WCAG audit at <strong>2.12 – 2.55 : 1</strong>. <strong>Fix:</strong> switch body copy + bullet ticks to brand-blue (<strong>9.44 : 1, AAA</strong>). Full audit lives in <code>scripts/contrast.json</code>.' },
+
+      { kind: 'keep', x: 78, y: 58.5,
+        title: 'Code panel is the right pattern',
+        fix: 'This is one of the strongest moments on the page — concrete dev signal, brand-contrasting surface, clearly differentiates from marketing pages. <strong>Keep:</strong> carry the pattern forward with brand-coloured syntax accents.' },
+
+      { kind: 'ux', x: 50, y: 73.0,
+        title: 'Customer logos undersized + below fold',
+        fix: 'Square, ARR, Thru are strong brand-recognition assets but rendered small, monotone and below the fold. <strong>Fix:</strong> elevate to the trust strip up top + repeat as a testimonial band with quotes.' },
+
+      { kind: 'brand', x: 50, y: 82.0,
+        title: 'Footer surface lacks brand anchor',
+        fix: 'Light-grey footer reads as page chrome, not a brand moment. <strong>Fix:</strong> deep-navy <code>#0E2F5C</code> — highest contrast, doubles as a section anchor, increases visible footer engagement.' },
+    ];
+
+    /* ────────────────────────────────────────────────────────────────
+     * Render cards + pins.
+     * ──────────────────────────────────────────────────────────────── */
+    const cardsEl = document.getElementById('cards');
+    const stageEl = document.getElementById('stage');
+    const imgEl   = document.getElementById('page');
+
+    ANNOTATIONS.forEach((a, i) => {
+      const n = i + 1;
+      const card = document.createElement('article');
+      card.className = 'annot-card';
+      card.dataset.n = n;
+      card.innerHTML = `
+        <div class="annot-card-head">
+          <span class="annot-num ${a.kind}">${n}</span>
+          <span class="annot-kind ${a.kind}">${a.kind}</span>
+        </div>
+        <p class="annot-title">${a.title}</p>
+        <p class="annot-fix">${a.fix}</p>
+      `;
+      cardsEl.appendChild(card);
+
+      const pin = document.createElement('button');
+      pin.type = 'button';
+      pin.className = `pin pin-${a.kind}`;
+      pin.dataset.n = n;
+      pin.title = a.title;
+      pin.setAttribute('aria-label', `Annotation ${n}: ${a.title}`);
+      pin.textContent = String(n);
+      pin.style.top  = a.y + '%';
+      pin.style.left = a.x + '%';
+      stageEl.appendChild(pin);
+    });
+
+    /* Pin <-> card interactivity */
+    function setActive(n) {
+      document.querySelectorAll('.pin').forEach((p) => p.classList.toggle('is-active', p.dataset.n === String(n)));
+      document.querySelectorAll('.annot-card').forEach((c) => c.classList.toggle('is-active', c.dataset.n === String(n)));
+    }
+
+    stageEl.addEventListener('click', (e) => {
+      const pin = e.target.closest('.pin');
+      if (!pin) return;
+      const n = pin.dataset.n;
+      setActive(n);
+      const card = document.querySelector(`.annot-card[data-n="${n}"]`);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+
+    cardsEl.addEventListener('click', (e) => {
+      const card = e.target.closest('.annot-card');
+      if (!card) return;
+      const n = card.dataset.n;
+      setActive(n);
+      const pin = document.querySelector(`.pin[data-n="${n}"]`);
+      if (pin) {
+        const r = pin.getBoundingClientRect();
+        window.scrollBy({ top: r.top - window.innerHeight / 2 + 30, behavior: 'smooth' });
+      }
+    });
+
+    /* ────────────────────────────────────────────────────────────────
+     * ?debug=1 helper — overlay a 10% × 5% grid and a live cursor
+     * read-out in image-relative percentages, so you can re-position
+     * any pin by reading its target coordinates straight off the image.
+     * ──────────────────────────────────────────────────────────────── */
+    if (new URLSearchParams(location.search).has('debug')) {
+      stageEl.classList.add('is-debug');
+      const overlay = document.createElement('div');
+      overlay.className = 'grid-overlay';
+      stageEl.appendChild(overlay);
+
+      const readout = document.createElement('div');
+      readout.className = 'coord-readout';
+      readout.textContent = 'x:--%  y:--%';
+      document.body.appendChild(readout);
+
+      stageEl.addEventListener('mousemove', (e) => {
+        const r = stageEl.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width)  * 100;
+        const y = ((e.clientY - r.top)  / r.height) * 100;
+        readout.textContent = `x:${x.toFixed(1)}%  y:${y.toFixed(2)}%`;
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Total Uptime — Homepage annotated</title>
+  <meta name="description" content="The reskin homepage with every meaningful change pinned and explained. Built for sell-in and copy-review." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="dist/tailwind.css" />
+  <style>
+    body { background: #EFF3F7; }
+
+    /* ---------- Layout ---------- */
+    .annot-grid {
+      display: grid;
+      grid-template-columns: 1024px minmax(320px, 380px);
+      gap: 28px;
+      align-items: start;
+    }
+    @media (max-width: 1400px) {
+      .annot-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- Iframe stage ---------- */
+    .annot-stage {
+      position: relative;
+      width: 1024px;
+      max-width: 100%;
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow:
+        0 6px 20px -10px rgba(20,31,54,.18),
+        0 30px 60px -20px rgba(20,31,54,.14);
+    }
+    .annot-stage iframe {
+      width: 100%;
+      border: 0;
+      display: block;
+      height: 6000px; /* auto-set by JS */
+    }
+
+    /* ---------- Pin ---------- */
+    .pin {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      border: 2.5px solid white;
+      color: white;
+      font-weight: 900;
+      font-size: 12.5px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 5;
+      box-shadow:
+        0 0 0 2px currentColor,
+        0 6px 14px -2px rgba(20,31,54,.4);
+      transition: transform .15s ease, box-shadow .15s ease;
+      font-feature-settings: "tnum";
+    }
+    .pin:hover,
+    .pin.is-active {
+      transform: translate(-50%, -50%) scale(1.18);
+      z-index: 6;
+    }
+    .pin.is-active {
+      box-shadow:
+        0 0 0 2px currentColor,
+        0 0 0 6px rgba(1,173,239,.25),
+        0 8px 18px -2px rgba(20,31,54,.45);
+    }
+    /* Kind colours */
+    .pin-kept   { background: #144586; color: #144586; }
+    .pin-new    { background: #01ADEF; color: #01ADEF; }
+    .pin-fixed  { background: #FF5A6E; color: #FF5A6E; }
+    .pin-phase2 { background: #6E4FB0; color: #6E4FB0; }
+
+    /* Pin label colours (override the colour: hex from .pin-* which we use for ring) */
+    .pin-kept   { background: #144586; color: white; --pin-ring: #144586; }
+    .pin-new    { background: #01ADEF; color: white; --pin-ring: #01ADEF; }
+    .pin-fixed  { background: #FF5A6E; color: white; --pin-ring: #FF5A6E; }
+    .pin-phase2 { background: #6E4FB0; color: white; --pin-ring: #6E4FB0; }
+    .pin {
+      box-shadow:
+        0 0 0 2px var(--pin-ring, #144586),
+        0 6px 14px -2px rgba(20,31,54,.4);
+    }
+    .pin.is-active {
+      box-shadow:
+        0 0 0 2px var(--pin-ring, #144586),
+        0 0 0 6px color-mix(in srgb, var(--pin-ring) 25%, transparent),
+        0 8px 18px -2px rgba(20,31,54,.45);
+    }
+
+    /* ---------- Annotations sidebar ---------- */
+    .annot-side {
+      position: sticky;
+      top: 96px;
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+    .annot-side::-webkit-scrollbar         { width: 8px; }
+    .annot-side::-webkit-scrollbar-thumb   { background: #C9D2DE; border-radius: 4px; }
+    .annot-side::-webkit-scrollbar-track   { background: transparent; }
+
+    .annot-card {
+      background: white;
+      border: 1px solid var(--tu-line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+    }
+    .annot-card:hover {
+      border-color: #C9D2DE;
+      transform: translateX(-2px);
+    }
+    .annot-card.is-active {
+      border-color: var(--tu-blue);
+      box-shadow: 0 4px 14px -4px rgba(20,69,134,.22);
+    }
+    .annot-card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .annot-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      color: white;
+      font-weight: 900;
+      font-size: 11px;
+      flex-shrink: 0;
+      font-feature-settings: "tnum";
+    }
+    .annot-num.kept   { background: #144586; }
+    .annot-num.new    { background: #01ADEF; }
+    .annot-num.fixed  { background: #FF5A6E; }
+    .annot-num.phase2 { background: #6E4FB0; }
+
+    .annot-kind {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+    .annot-kind.kept   { background: #DCE7F5; color: #144586; }
+    .annot-kind.new    { background: #D6F1FE; color: #016A93; }
+    .annot-kind.fixed  { background: #FBDCE0; color: #8C1A2A; }
+    .annot-kind.phase2 { background: #EBE2F8; color: #4A2F7A; }
+
+    .annot-title { font-weight: 800; color: var(--tu-blue); font-size: 14px; line-height: 1.3; }
+    .annot-body  { color: var(--tu-ink2); font-size: 13px; line-height: 1.5; margin-top: 6px; }
+
+    /* Legend on intro */
+    .legend-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: white;
+      border: 1px solid var(--tu-line);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--tu-blue);
+    }
+    .legend-dot {
+      width: 12px; height: 12px; border-radius: 999px;
+    }
+  </style>
+</head>
+<body class="text-brand-ink">
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- ════════ TOP BAR ════════ -->
+  <header class="sticky top-0 z-40 bg-white border-b border-brand-line">
+    <div class="mx-auto max-w-[1432px] flex items-center justify-between gap-6 px-6 py-3.5">
+      <a href="index.html" class="flex items-center gap-3" aria-label="Total Uptime home">
+        <img src="assets/tu-logo.svg" alt="Total Uptime" class="h-9 w-auto" />
+        <span class="hidden sm:inline text-brand-ink2 text-sm">/ Homepage annotated</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-1 text-sm">
+        <a href="brand.html" class="nav-link">Brand system</a>
+        <a href="audit.html" class="nav-link">Audit</a>
+        <a href="mobile-preview.html" class="nav-link">Mobile preview</a>
+      </nav>
+      <div class="flex items-center gap-2">
+        <a href="index.html" target="_blank" rel="noopener" class="btn btn-ghost text-sm">Open homepage ↗</a>
+        <a href="cloud-dns-service.html" target="_blank" rel="noopener" class="btn btn-primary text-sm">DNS page ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="mx-auto max-w-[1432px] px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
+
+    <!-- ════════ INTRO ════════ -->
+    <div class="max-w-4xl">
+      <p class="eyebrow">Audit walkthrough · homepage</p>
+      <h1 class="mt-3 h-display text-3xl sm:text-4xl">Every change, pinned and explained.</h1>
+      <p class="mt-4 text-lg text-brand-ink2">
+        The live reskin on the left, with a numbered pin on every meaningful change. Click any
+        pin (or any card on the right) and the matching annotation highlights. Use this as the
+        backing doc when you walk the client through the homepage — every decision is traceable
+        to either the brief, the audit, or the existing Total Uptime site.
+      </p>
+
+      <div class="mt-6 flex flex-wrap gap-2.5">
+        <span class="legend-pill"><span class="legend-dot" style="background:#144586"></span> Kept · verbatim TU</span>
+        <span class="legend-pill"><span class="legend-dot" style="background:#01ADEF"></span> New · brand pattern</span>
+        <span class="legend-pill"><span class="legend-dot" style="background:#FF5A6E"></span> Fixed · audit-driven</span>
+        <span class="legend-pill"><span class="legend-dot" style="background:#6E4FB0"></span> Phase 2 · later</span>
+      </div>
+    </div>
+
+    <!-- ════════ TWO-COLUMN: IFRAME STAGE + ANNOTATION SIDEBAR ════════ -->
+    <div class="annot-grid mt-12">
+
+      <!-- Iframe stage with pins overlaid -->
+      <div class="annot-stage" id="stage">
+        <iframe id="page" src="index.html" title="Reskin homepage" loading="lazy"></iframe>
+        <!-- Pins are appended here by JS -->
+      </div>
+
+      <!-- Annotations sidebar -->
+      <aside class="annot-side" id="cards">
+        <!-- Cards rendered by JS -->
+      </aside>
+    </div>
+  </main>
+
+  <!-- ════════ FOOTER ════════ -->
+  <footer class="mt-16 surface-blue">
+    <div class="mx-auto max-w-[1432px] px-4 sm:px-6 lg:px-8 py-10 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between text-sm">
+      <span class="text-white/80">© Total Uptime — annotated homepage walkthrough.</span>
+      <a href="brand.html" class="text-brand-cyan font-bold hover:text-white">Back to brand system →</a>
+    </div>
+  </footer>
+
+  <script>
+    /* ────────────────────────────────────────────────────────────────
+     * Annotation registry.
+     * Each entry has a CSS selector that's resolved against the
+     * iframe's contentDocument; the pin is placed at the given anchor
+     * point on that element's bounding box.
+     * ──────────────────────────────────────────────────────────────── */
+    const ANNOTATIONS = [
+      { kind: 'kept', selector: 'header a[aria-label="Total Uptime home"] img', anchor: 'right',
+        title: 'Total Uptime logo — kept',
+        body: 'Current Total Uptime wordmark, both light + dark variants, restored across header and footer. Phase 2 will redraw it on the new <code>#144586</code> brand-blue token; for v1 it stays as-is.' },
+
+      { kind: 'new', selector: 'header nav > div:nth-of-type(1) > button', anchor: 'bottom',
+        title: '3-column mega menu',
+        body: 'Old single-column dropdown can\'t scale to the new Products IA. Three columns — Application delivery / DNS / Network &amp; security — each with a chip-coded eyebrow. Hover the Products link to expand.' },
+
+      { kind: 'new', selector: 'header > div:nth-of-type(2) .btn-primary', anchor: 'top',
+        title: 'Coral primary CTA — reserved use',
+        body: 'Coral <code>#FF5A6E</code> is rationed to a single primary CTA per view. Every other action uses ghost or secondary styles, so the commercial path is always visually unambiguous.' },
+
+      { kind: 'new', selector: 'main > section:nth-of-type(1)', anchor: 'top-right',
+        title: 'Hero surface — Edgenexus cyan',
+        body: 'Replaces the live site\'s <code>#1f6ab5</code> mid-blue hero with electric cyan <code>#01ADEF</code>. Same "I\'m on a hero" signal — more distinctive in a category dominated by safe blues.' },
+
+      { kind: 'kept', selector: 'main > section:nth-of-type(1) h1', anchor: 'left',
+        title: 'Eyebrow + H1 — verbatim TU',
+        body: '"Focus on software development — not managing infrastructure or clouds." + "The API and SaaS Cloud" — both lifted directly from the live Total Uptime site. Nothing here is invented.' },
+
+      { kind: 'kept', selector: 'main > section:nth-of-type(1) .btn-primary', anchor: 'bottom',
+        title: 'Hero CTAs — same order',
+        body: '"Book a demo" (primary) + "Start a free trial" (secondary). Same order + same labels as the live TU site; restyled to the new system.' },
+
+      { kind: 'new', selector: 'main > section:nth-of-type(1) .relative.h-72', anchor: 'center',
+        title: 'Stat cluster — real TU figures',
+        body: 'Three overlapping tiles in the hero peripheral vision. Numbers are from the live Total Uptime site (100% DNS uptime, 24/7/365 support, 0 add-ons required) — no invented metrics.' },
+
+      { kind: 'new', selector: 'main > section:nth-of-type(2)', anchor: 'top',
+        title: 'Trust strip — new section',
+        body: 'The live site has a small "compatible with" line; we elevated it to a full trust strip with monochrome cloud-provider logos. Greyscale by default; full colour on hover for instant recognition without visual noise.' },
+
+      { kind: 'kept', selector: 'main section#features h2', anchor: 'top-left',
+        title: 'Features eyebrow + H2 — verbatim TU',
+        body: '"We help, wherever your services are hosted." + "Control any application anywhere!" — both verbatim from the live TU site, including the exclamation mark.' },
+
+      { kind: 'new', selector: 'main section#features .tile-top:nth-of-type(2)', anchor: 'top-right',
+        title: 'Category-coded tile borders',
+        body: 'Top-border colour codes which product family the tile belongs to: cyan = application delivery, coral = security, mint = network / DNS, blue = ops / company. Same code repeats in the mega menu and pricing tables.' },
+
+      { kind: 'kept', selector: 'main section.surface-sky-soft.border-y h2', anchor: 'left',
+        title: 'REST API section — verbatim TU',
+        body: 'Eyebrow ("REST API comes standard"), H2 ("Designed for Developers too") and the body paragraph are all verbatim from TU. The dark code panel on the right is new — illustrative only, dev team to validate the example.' },
+
+      { kind: 'fixed', selector: 'main section.surface-sky-soft.border-y ul li span.text-brand-blue', anchor: 'center',
+        title: 'Bullet ticks — accessibility fix',
+        body: 'Was mint <code>#5CC4A8</code> (2.12:1 on white — fails WCAG). Now brand-blue <code>#144586</code> (9.44:1 — AAA). The full audit lives in <code>scripts/contrast.js</code> and <code>brand.html</code>.' },
+
+      { kind: 'kept', selector: 'main > section:nth-of-type(5) h2', anchor: 'top',
+        title: 'Stats band — verbatim TU',
+        body: 'Eyebrow ("The network for cloud integration") + H2 ("Global Scale. Enterprise Grade.") verbatim from TU. All four metrics — 100% / 24/7/365 / 6 yrs / SOC2 II — are TU\'s real figures.' },
+
+      { kind: 'kept', selector: 'main section.surface-sky h2', anchor: 'top-left',
+        title: 'About / CTA band — verbatim TU',
+        body: 'Replaces an invented "Ready when your apps are" CTA with the live site\'s actual About paragraph: "Total Uptime specializes in helping leading API and SaaS organizations..." Conversion + narrative in one band.' },
+
+      { kind: 'new', selector: 'footer', anchor: 'top-right',
+        title: 'Footer — deep-navy surface',
+        body: 'New surface — <code>#0E2F5C</code> brand-blue9 for highest contrast + brand anchor. Column structure mirrors the live TU footer; uses the dark variant of the wordmark.' },
+    ];
+
+    /* ────────────────────────────────────────────────────────────────
+     * Render cards in the sidebar, then position pins on the iframe
+     * once the page inside loads.
+     * ──────────────────────────────────────────────────────────────── */
+    const cardsEl = document.getElementById('cards');
+    const stageEl = document.getElementById('stage');
+    const iframe  = document.getElementById('page');
+
+    ANNOTATIONS.forEach((a, i) => {
+      const n = i + 1;
+      const card = document.createElement('article');
+      card.className = 'annot-card';
+      card.dataset.n = n;
+      card.innerHTML = `
+        <div class="annot-card-head">
+          <span class="annot-num ${a.kind}">${n}</span>
+          <span class="annot-kind ${a.kind}">${a.kind}</span>
+        </div>
+        <p class="annot-title">${a.title}</p>
+        <p class="annot-body">${a.body}</p>
+      `;
+      cardsEl.appendChild(card);
+
+      const pin = document.createElement('button');
+      pin.type = 'button';
+      pin.className = `pin pin-${a.kind}`;
+      pin.dataset.n = n;
+      pin.title = a.title;
+      pin.setAttribute('aria-label', `Annotation ${n}: ${a.title}`);
+      pin.textContent = String(n);
+      pin.style.top = '-100px';   /* off-screen until positioned */
+      pin.style.left = '-100px';
+      stageEl.appendChild(pin);
+    });
+
+    /* Positioning helpers — anchor names map to a point on the
+     * matched element's bounding box. */
+    function anchorPoint(rect, anchor) {
+      switch (anchor) {
+        case 'top-left':     return { x: rect.left + 12,           y: rect.top + 12 };
+        case 'top':          return { x: rect.left + rect.width/2, y: rect.top + 14 };
+        case 'top-right':    return { x: rect.right - 14,          y: rect.top + 14 };
+        case 'right':        return { x: rect.right - 14,          y: rect.top + rect.height/2 };
+        case 'bottom-right': return { x: rect.right - 14,          y: rect.bottom - 14 };
+        case 'bottom':       return { x: rect.left + rect.width/2, y: rect.bottom - 14 };
+        case 'bottom-left':  return { x: rect.left + 14,           y: rect.bottom - 14 };
+        case 'left':         return { x: rect.left + 14,           y: rect.top + rect.height/2 };
+        case 'center':       return { x: rect.left + rect.width/2, y: rect.top + rect.height/2 };
+        default:             return { x: rect.left + rect.width/2, y: rect.top + 14 };
+      }
+    }
+
+    /* Auto-size iframe to full content height (so pin positions stay
+     * stable — no internal scroll) and place every pin. */
+    function relayout() {
+      try {
+        const doc = iframe.contentDocument;
+        if (!doc || !doc.documentElement) return;
+        // Make sure no modal dialog from the embedded page is occluding it.
+        doc.querySelectorAll('[role="dialog"][aria-modal="true"]').forEach((el) => el.style.display = 'none');
+        const h = Math.max(
+          doc.body ? doc.body.scrollHeight : 0,
+          doc.documentElement.scrollHeight,
+          doc.documentElement.offsetHeight
+        );
+        if (h > 0) iframe.style.height = h + 'px';
+
+        ANNOTATIONS.forEach((a, i) => {
+          const n = i + 1;
+          const el = doc.querySelector(a.selector);
+          const pin = stageEl.querySelector(`.pin[data-n="${n}"]`);
+          if (!el || !pin) return;
+          const rect = el.getBoundingClientRect();
+          /* contentDocument rects are relative to the iframe's
+           * viewport, which equals the iframe element's box since
+           * we've auto-sized to full content height. Add the iframe's
+           * own offset within the stage. */
+          const iframeRect = iframe.getBoundingClientRect();
+          const stageRect  = stageEl.getBoundingClientRect();
+          const p = anchorPoint(rect, a.anchor);
+          pin.style.top  = (p.y + (iframeRect.top  - stageRect.top))  + 'px';
+          pin.style.left = (p.x + (iframeRect.left - stageRect.left)) + 'px';
+        });
+      } catch (e) { /* same-origin should not throw */ }
+    }
+
+    iframe.addEventListener('load', () => {
+      relayout();
+      [120, 400, 1000, 2000].forEach((ms) => setTimeout(relayout, ms));
+      try {
+        new ResizeObserver(relayout).observe(iframe.contentDocument.documentElement);
+      } catch (_) {}
+    });
+    window.addEventListener('resize', relayout);
+
+    /* ────────────────────────────────────────────────────────────────
+     * Pin <-> card interactivity
+     * ──────────────────────────────────────────────────────────────── */
+    function setActive(n) {
+      document.querySelectorAll('.pin').forEach((p) => p.classList.toggle('is-active', p.dataset.n === String(n)));
+      document.querySelectorAll('.annot-card').forEach((c) => c.classList.toggle('is-active', c.dataset.n === String(n)));
+    }
+
+    stageEl.addEventListener('click', (e) => {
+      const pin = e.target.closest('.pin');
+      if (!pin) return;
+      const n = pin.dataset.n;
+      setActive(n);
+      const card = document.querySelector(`.annot-card[data-n="${n}"]`);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+
+    cardsEl.addEventListener('click', (e) => {
+      const card = e.target.closest('.annot-card');
+      if (!card) return;
+      const n = card.dataset.n;
+      setActive(n);
+      const pin = document.querySelector(`.pin[data-n="${n}"]`);
+      if (pin) {
+        /* Scroll the parent page so the pin is roughly centred in the viewport */
+        const r = pin.getBoundingClientRect();
+        window.scrollBy({ top: r.top - window.innerHeight / 2 + 30, behavior: 'smooth' });
+      }
+    });
+  </script>
+</body>
+</html>

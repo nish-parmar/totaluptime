@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Total Uptime — menu & nav states (for html.to.design)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="dist/tailwind.css" />
+  <style>
+    /* Page-only — keeps each state inside its own visible frame so the
+     * HTML-to-Figma plugin can capture every menu state in one pass. */
+    body { background: #F7F9FC; padding: 32px 24px 64px; }
+    .page { max-width: 1500px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+    .group-title { font-size: 22px; font-weight: 800; color: var(--tu-blue); margin-bottom: 20px; }
+    .group-sub { font-size: 14px; color: var(--tu-ink2); margin-top: -14px; margin-bottom: 20px; max-width: 720px; }
+    .frame-label { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--tu-ink2); margin-bottom: 10px; }
+    .frame-note  { font-size: 12px; color: var(--tu-ink2); margin-top: 8px; }
+    .frame { background: #fff; border: 1px solid var(--tu-line); border-radius: 12px; overflow: hidden; position: relative; }
+    .frame-desktop { width: 1440px; max-width: 100%; }
+    .frame-mobile { width: 375px; }
+    .frame-mobile-tall { width: 375px; height: 780px; }
+    .frame-mobile-page { width: 375px; height: 740px; }
+    .row-mobile { display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start; }
+    .meta-strip { background: #fff; border: 1px solid var(--tu-line); border-radius: 12px; padding: 16px 20px; font-size: 13px; color: var(--tu-ink2); }
+    /* Replicas of fixed-position elements behave as in-flow blocks inside .frame */
+    .frame .replica-drawer { position: absolute !important; inset: 0; }
+    .frame .replica-fab { position: absolute !important; }
+    .frame .replica-sheet { position: absolute !important; }
+  </style>
+</head>
+<body>
+  <main class="page">
+
+    <header>
+      <h1 class="text-3xl font-extrabold text-brand-blue tracking-tight">Total Uptime — navigation states</h1>
+      <p class="mt-2 text-brand-ink2 max-w-3xl">Every menu / navigation state rendered statically and visible at once. Use this URL for html.to.design instead of the homepage — that way the plugin captures the mega menu, mobile drawer, expanded accordion, the floating &ldquo;On this page&rdquo; pill <em>and</em> the bottom sheet, all in a single import.</p>
+      <div class="mt-5 meta-strip"><strong>Tip:</strong> resize your browser to <strong>at least 1500 px wide</strong> (so the 1440 px desktop frames render fully) before clicking the html.to.design extension. Desktop frames are exactly <strong>1440 px</strong> wide, matching the standard Figma artboard. Mobile frames are <strong>375 px</strong>.</div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         GROUP 1 — Desktop header
+         ══════════════════════════════════════════════════════════════ -->
+    <section>
+      <h2 class="group-title">1. Desktop site header</h2>
+      <p class="group-sub">Sticky header used on every page. Two states: default, and Products mega menu open. Same component on every page — bring once, reuse.</p>
+
+      <p class="frame-label">1a · Desktop header — default</p>
+      <div class="frame frame-desktop">
+        <!-- utility row -->
+        <div class="surface-sky-soft">
+          <div class="mx-auto max-w-7xl flex items-center justify-end gap-6 px-6 text-xs text-brand-ink2">
+            <a href="#" class="py-2">Status</a>
+            <a href="#" class="py-2">Support</a>
+            <a href="#" class="py-2">Login</a>
+          </div>
+        </div>
+        <div class="mx-auto max-w-7xl flex items-center justify-between gap-6 px-6 py-3.5">
+          <span class="flex items-center gap-2">
+            <img src="assets/tu-logo.svg" alt="Total Uptime" class="h-8 w-auto" />
+          </span>
+          <nav class="flex items-center gap-1 text-[15px]">
+            <span class="nav-link inline-flex items-center gap-1">Products <svg class="w-3.5 h-3.5 text-brand-ink2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+            <span class="nav-link inline-flex items-center gap-1">Solutions <svg class="w-3.5 h-3.5 text-brand-ink2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+            <span class="nav-link">Pricing</span>
+            <span class="nav-link">Resources</span>
+            <span class="nav-link">Company</span>
+          </nav>
+          <div class="flex items-center gap-2">
+            <span class="btn btn-ghost">Sign in</span>
+            <span class="btn btn-primary">Start free trial</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="frame-label mt-10">1b · Desktop header — Products mega menu open</p>
+      <div class="frame frame-desktop" style="padding-bottom: 280px;">
+        <div class="surface-sky-soft">
+          <div class="mx-auto max-w-7xl flex items-center justify-end gap-6 px-6 text-xs text-brand-ink2">
+            <a href="#" class="py-2">Status</a><a href="#" class="py-2">Support</a><a href="#" class="py-2">Login</a>
+          </div>
+        </div>
+        <div class="mx-auto max-w-7xl flex items-center justify-between gap-6 px-6 py-3.5">
+          <span class="flex items-center gap-2">
+            <img src="assets/tu-logo.svg" alt="Total Uptime" class="h-8 w-auto" />
+          </span>
+          <nav class="flex items-center gap-1 text-[15px]">
+            <span class="nav-link inline-flex items-center gap-1" style="background: var(--tu-sky-2); color: var(--tu-cyan);">Products <svg class="w-3.5 h-3.5 rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+            <span class="nav-link inline-flex items-center gap-1">Solutions <svg class="w-3.5 h-3.5 text-brand-ink2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+            <span class="nav-link">Pricing</span>
+            <span class="nav-link">Resources</span>
+            <span class="nav-link">Company</span>
+          </nav>
+          <div class="flex items-center gap-2">
+            <span class="btn btn-ghost">Sign in</span>
+            <span class="btn btn-primary">Start free trial</span>
+          </div>
+        </div>
+        <!-- Mega menu, statically positioned within the frame -->
+        <div class="mega" style="position: absolute; left: 50%; transform: translateX(-50%); top: 88px;">
+          <div class="grid grid-cols-3 gap-x-8 gap-y-2">
+            <div>
+              <div class="flex items-center gap-2 mb-2"><span class="cat cat-cyan"></span><p class="eyebrow eyebrow-blue text-brand-ink2">Application delivery</p></div>
+              <span class="block py-2 px-3 rounded-lg"><span class="block text-sm font-semibold text-brand-blue">ADC as a Service</span><span class="block text-xs text-brand-ink2">Improve availability, security and performance for any app.</span></span>
+              <span class="block py-2 px-3 rounded-lg"><span class="block text-sm font-semibold text-brand-blue">Cloud Load Balancing</span><span class="block text-xs text-brand-ink2">Distribute traffic to any cloud or device.</span></span>
+              <span class="block py-2 px-3 rounded-lg"><span class="block text-sm font-semibold text-brand-blue">Global Server Load Balancing</span><span class="block text-xs text-brand-ink2">Proximity routing behind a single anycast IP.</span></span>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 mb-2"><span class="cat cat-mint"></span><p class="eyebrow eyebrow-blue text-brand-ink2">DNS services</p></div>
+              <span class="block py-2 px-3 rounded-lg bg-brand-sky2"><span class="block text-sm font-semibold text-brand-cyan">Cloud DNS Service</span><span class="block text-xs text-brand-ink2">Ensure 100% reliability of name resolution.</span></span>
+              <span class="block py-2 px-3 rounded-lg"><span class="block text-sm font-semibold text-brand-blue">Protective DNS</span><span class="block text-xs text-brand-ink2">Block malware, phishing and botnets at the gateway.</span></span>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 mb-2"><span class="cat cat-coral"></span><p class="eyebrow eyebrow-blue text-brand-ink2">Network &amp; security</p></div>
+              <span class="block py-2 px-3 rounded-lg"><span class="block text-sm font-semibold text-brand-blue">Multicloud Networking</span><span class="block text-xs text-brand-ink2">Build a mesh of networks between sites anywhere.</span></span>
+              <span class="block py-2 px-3 rounded-lg"><span class="block text-sm font-semibold text-brand-blue">Web App &amp; API Protection</span><span class="block text-xs text-brand-ink2">Protect against 15 classes of vulnerabilities.</span></span>
+              <span class="block py-2 px-3 rounded-lg"><span class="block text-sm font-semibold text-brand-blue">BGP over GRE / VPN</span><span class="block text-xs text-brand-ink2">Static IP anywhere over standard ISP links.</span></span>
+            </div>
+          </div>
+          <div class="mt-3 pt-3 hairline text-right">
+            <span class="text-sm font-bold text-brand-cyan">View all products →</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         GROUP 2 — Mobile drawer
+         ══════════════════════════════════════════════════════════════ -->
+    <section>
+      <h2 class="group-title">2. Mobile drawer</h2>
+      <p class="group-sub">Right-side drawer. Two states: collapsed (just group rows visible), and Products accordion expanded. Both include the pinned CTA strip at the bottom.</p>
+      <div class="row-mobile">
+        <div>
+          <p class="frame-label">2a · Drawer — collapsed groups</p>
+          <div class="frame frame-mobile-tall">
+            <!-- backdrop dim layer -->
+            <div style="position:absolute; inset:0; background: rgba(20,69,134,.55);"></div>
+            <!-- drawer panel -->
+            <div style="position:absolute; inset-block: 0; right: 0; width: 320px; background: #fff; display: flex; flex-direction: column;">
+              <div class="flex items-center justify-between px-4 py-3 border-b border-brand-line">
+                <span class="font-bold text-brand-blue">Menu</span>
+                <span class="w-10 h-10 inline-flex items-center justify-center rounded-lg">
+                  <svg class="w-6 h-6 text-brand-ink2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </span>
+              </div>
+              <nav class="flex-1 overflow-hidden p-3 space-y-1">
+                <span class="w-full flex items-center justify-between px-3 py-3 rounded-lg"><span class="flex items-center gap-2 font-semibold text-brand-blue"><span class="cat cat-cyan"></span> Products</span><svg class="w-4 h-4 text-brand-ink2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+                <span class="w-full flex items-center justify-between px-3 py-3 rounded-lg"><span class="flex items-center gap-2 font-semibold text-brand-blue"><span class="cat cat-mint"></span> Solutions</span><svg class="w-4 h-4 text-brand-ink2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+                <span class="block px-3 py-3 font-semibold text-brand-blue rounded-lg"><span class="inline-flex items-center gap-2"><span class="cat cat-coral"></span> Pricing</span></span>
+                <span class="block px-3 py-3 font-semibold text-brand-blue rounded-lg"><span class="inline-flex items-center gap-2"><span class="cat cat-blue"></span> Resources</span></span>
+                <span class="block px-3 py-3 font-semibold text-brand-blue rounded-lg"><span class="inline-flex items-center gap-2"><span class="cat cat-blue"></span> Company</span></span>
+                <div class="px-3 py-3 mt-2 surface-sky-soft rounded-xl text-xs text-brand-ink2 space-y-1">
+                  <span class="block py-1.5">Status</span>
+                  <span class="block py-1.5">Support</span>
+                </div>
+              </nav>
+              <div class="border-t border-brand-line p-3 flex gap-2 bg-white">
+                <span class="btn btn-primary flex-1 justify-center">Start free trial</span>
+                <span class="btn btn-ghost flex-1 justify-center">Sign in</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="frame-label">2b · Drawer — Products expanded</p>
+          <div class="frame frame-mobile-tall">
+            <div style="position:absolute; inset:0; background: rgba(20,69,134,.55);"></div>
+            <div style="position:absolute; inset-block: 0; right: 0; width: 320px; background: #fff; display: flex; flex-direction: column;">
+              <div class="flex items-center justify-between px-4 py-3 border-b border-brand-line">
+                <span class="font-bold text-brand-blue">Menu</span>
+                <span class="w-10 h-10 inline-flex items-center justify-center rounded-lg">
+                  <svg class="w-6 h-6 text-brand-ink2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </span>
+              </div>
+              <nav class="flex-1 overflow-y-auto p-3 space-y-1">
+                <div>
+                  <span class="w-full flex items-center justify-between px-3 py-3 rounded-lg bg-brand-sky2"><span class="flex items-center gap-2 font-semibold text-brand-blue"><span class="cat cat-cyan"></span> Products</span><svg class="w-4 h-4 text-brand-ink2 rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+                  <div class="pl-5 pr-2 pb-2">
+                    <p class="eyebrow text-brand-ink2 mt-3 mb-1">Application delivery</p>
+                    <span class="block py-2 text-sm text-brand-blue font-semibold">ADC as a Service</span>
+                    <span class="block py-2 text-sm text-brand-blue font-semibold">Cloud Load Balancing</span>
+                    <span class="block py-2 text-sm text-brand-blue font-semibold">Global Server Load Balancing</span>
+                    <p class="eyebrow text-brand-ink2 mt-3 mb-1">DNS services</p>
+                    <span class="block py-2 text-sm text-brand-blue font-semibold">Cloud DNS Service</span>
+                    <span class="block py-2 text-sm text-brand-blue font-semibold">Protective DNS</span>
+                    <p class="eyebrow text-brand-ink2 mt-3 mb-1">Network &amp; security</p>
+                    <span class="block py-2 text-sm text-brand-blue font-semibold">Multicloud Networking</span>
+                    <span class="block py-2 text-sm text-brand-blue font-semibold">Web App &amp; API Protection</span>
+                  </div>
+                </div>
+                <span class="w-full flex items-center justify-between px-3 py-3 rounded-lg"><span class="flex items-center gap-2 font-semibold text-brand-blue"><span class="cat cat-mint"></span> Solutions</span><svg class="w-4 h-4 text-brand-ink2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+                <span class="block px-3 py-3 font-semibold text-brand-blue rounded-lg"><span class="inline-flex items-center gap-2"><span class="cat cat-coral"></span> Pricing</span></span>
+              </nav>
+              <div class="border-t border-brand-line p-3 flex gap-2 bg-white">
+                <span class="btn btn-primary flex-1 justify-center">Start free trial</span>
+                <span class="btn btn-ghost flex-1 justify-center">Sign in</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         GROUP 3 — DNS desktop subnav (pill rail)
+         ══════════════════════════════════════════════════════════════ -->
+    <section>
+      <h2 class="group-title">3. DNS page — desktop &ldquo;On this page&rdquo; pill rail</h2>
+      <p class="group-sub">Inline sticky rail that sits below the main header on the DNS product page. Active state is solid cyan; inactive pills are quiet.</p>
+      <p class="frame-label">3 · Sticky rail under header</p>
+      <div class="frame frame-desktop">
+        <nav class="bg-brand-sky2/90 border-b border-brand-line">
+          <div class="mx-auto max-w-7xl px-6 py-3 flex items-center justify-between gap-4">
+            <div class="otp-rail">
+              <span class="otp-rail-link is-active">Overview</span>
+              <span class="otp-rail-link">Features</span>
+              <span class="otp-rail-link">How it works</span>
+              <span class="otp-rail-link">Comparison</span>
+              <span class="otp-rail-link">Pricing</span>
+              <span class="otp-rail-link">FAQ</span>
+            </div>
+            <span class="btn btn-primary text-sm">Start free trial →</span>
+          </div>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         GROUP 4 — DNS mobile "On this page" — the fix
+         ══════════════════════════════════════════════════════════════ -->
+    <section>
+      <h2 class="group-title">4. DNS page — mobile &ldquo;On this page&rdquo; (the fix)</h2>
+      <p class="group-sub">Replaces the original double-sticky / horizontal-scroll subnav. Three states: closed (just the floating pill bottom-right), opened (sheet visible with all sections), and the visual comparison &mdash; what it replaces.</p>
+
+      <div class="row-mobile">
+        <div>
+          <p class="frame-label">4a · Mobile DNS page — pill collapsed</p>
+          <div class="frame frame-mobile-page">
+            <!-- mobile mini header -->
+            <div class="flex items-center justify-between px-3 py-2.5 border-b border-brand-line">
+              <span class="flex items-center gap-2">
+                <img src="assets/tu-logo.svg" alt="Total Uptime" class="h-6 w-auto" />
+              </span>
+              <svg class="w-6 h-6 text-brand-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            </div>
+            <!-- hero stub -->
+            <div class="surface-cyan p-4 text-white">
+              <p class="eyebrow" style="color: rgba(255,255,255,.85)">DNS + Traffic + Monitoring</p>
+              <p class="mt-2 text-xl font-extrabold leading-tight">Comprehensive DNS infrastructure platform.</p>
+              <p class="mt-2 text-xs text-white/90">When 100% uptime is the only option.</p>
+              <span class="btn btn-primary mt-3 text-xs">Start free trial →</span>
+            </div>
+            <div class="p-3 space-y-2">
+              <p class="text-sm font-bold text-brand-blue">Authoritative DNS</p>
+              <p class="text-xs text-brand-ink2">Global anycast DNS hosting with DNSSEC, IPv6, reverse DNS and custom TTL.</p>
+              <p class="text-sm font-bold text-brand-blue mt-3">Traffic management</p>
+              <p class="text-xs text-brand-ink2">Failover pools, round-robin, Geo DNS and multi-region steering.</p>
+            </div>
+            <!-- floating pill (positioned within frame) -->
+            <span class="otp-fab replica-fab" style="position:absolute; right: 12px; bottom: 12px;">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 12h10M4 18h16"/></svg>
+              <span>On this page</span>
+              <svg class="w-3.5 h-3.5 otp-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 15 6-6 6 6"/></svg>
+            </span>
+          </div>
+        </div>
+
+        <div>
+          <p class="frame-label">4b · Mobile DNS page — sheet open</p>
+          <div class="frame frame-mobile-page">
+            <div class="flex items-center justify-between px-3 py-2.5 border-b border-brand-line">
+              <span class="flex items-center gap-2">
+                <img src="assets/tu-logo.svg" alt="Total Uptime" class="h-6 w-auto" />
+              </span>
+              <svg class="w-6 h-6 text-brand-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            </div>
+            <div class="surface-cyan p-4 text-white">
+              <p class="eyebrow" style="color: rgba(255,255,255,.85)">DNS + Traffic + Monitoring</p>
+              <p class="mt-2 text-xl font-extrabold leading-tight">Comprehensive DNS infrastructure platform.</p>
+            </div>
+            <div class="p-3 space-y-2">
+              <p class="text-sm font-bold text-brand-blue">Authoritative DNS</p>
+              <p class="text-xs text-brand-ink2">Global anycast DNS hosting with DNSSEC and custom TTL.</p>
+            </div>
+
+            <!-- backdrop -->
+            <div style="position:absolute; inset:0; background: rgba(20,69,134,.45);"></div>
+            <!-- sheet -->
+            <div class="otp-sheet replica-sheet" style="position:absolute; left:0; right:0; bottom:0; max-height: 80%;">
+              <div class="otp-grab"></div>
+              <p class="eyebrow text-brand-ink2 px-2 pb-2">On this page</p>
+              <div class="otp-item is-active">Overview <span aria-hidden="true">›</span></div>
+              <div class="otp-item">Features <span aria-hidden="true">›</span></div>
+              <div class="otp-item">How it works <span aria-hidden="true">›</span></div>
+              <div class="otp-item">Comparison <span aria-hidden="true">›</span></div>
+              <div class="otp-item">Pricing <span aria-hidden="true">›</span></div>
+              <div class="otp-item">FAQ <span aria-hidden="true">›</span></div>
+              <div class="pt-4 pb-2 flex gap-2">
+                <span class="btn btn-primary flex-1 justify-center">Start free trial</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="frame-label">4c · For reference — the broken state being replaced</p>
+          <div class="frame frame-mobile-page">
+            <div class="flex items-center justify-between px-3 py-2.5 border-b border-brand-line">
+              <span class="flex items-center gap-2">
+                <img src="assets/tu-logo.svg" alt="Total Uptime" class="h-6 w-auto" />
+              </span>
+              <svg class="w-6 h-6 text-brand-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            </div>
+            <!-- second sticky bar (the bug) -->
+            <div style="border-bottom: 1px solid var(--tu-line); display: flex; align-items: center; gap: 6px; padding: 6px 12px; overflow: hidden; position: relative;">
+              <span style="font-size: 11px; color: var(--tu-blue); padding: 4px 8px; border-radius: 4px; background: #E5F4FB; white-space: nowrap; font-weight: 700;">Overview</span>
+              <span style="font-size: 11px; color: var(--tu-ink2); padding: 4px 8px; white-space: nowrap;">Why it matters</span>
+              <span style="font-size: 11px; color: var(--tu-ink2); padding: 4px 8px; white-space: nowrap;">Features</span>
+              <span style="font-size: 11px; color: var(--tu-ink2); padding: 4px 8px; white-space: nowrap;">Platform</span>
+              <span style="font-size: 11px; color: var(--tu-ink2); padding: 4px 8px; white-space: nowrap;">How it</span>
+              <span style="position: absolute; right: 0; top: 6px; bottom: 6px; width: 1px; background: var(--tu-line);"></span>
+            </div>
+            <div class="surface-cyan p-4 text-white">
+              <p class="eyebrow" style="color: rgba(255,255,255,.85)">DNS + Traffic + Monitoring</p>
+              <p class="mt-2 text-lg font-extrabold leading-tight">Comprehensive DNS infrastructure platform.</p>
+            </div>
+            <div class="p-3 space-y-2">
+              <p class="text-sm font-bold text-brand-blue">Authoritative DNS</p>
+              <p class="text-xs text-brand-ink2">Global anycast DNS hosting.</p>
+            </div>
+            <!-- annotation: red dashed outline + label -->
+            <div style="position: absolute; top: 49px; left: 0; right: 0; height: 32px; border: 1.5px dashed var(--tu-coral); pointer-events: none;"></div>
+            <div style="position: absolute; top: 49px; right: 8px; background: var(--tu-coral); color: #fff; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px;">scroll-only · no affordance</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         GROUP 5 — Component primitives
+         ══════════════════════════════════════════════════════════════ -->
+    <section>
+      <h2 class="group-title">5. Buttons &amp; pills (for component library)</h2>
+      <p class="group-sub">The interactive primitives all nav states are built from.</p>
+
+      <p class="frame-label">5 · Button &amp; pill primitives</p>
+      <div class="frame frame-desktop">
+        <div class="p-6 space-y-6">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider text-brand-ink2 mb-3">Primary CTA &middot; coral</p>
+            <div class="flex gap-3 flex-wrap items-center">
+              <span class="btn btn-primary">Start free trial</span>
+              <span class="btn btn-primary" style="font-size: 1rem; padding: .75rem 1.5rem;">Start free trial</span>
+              <span class="btn btn-primary text-sm">Get a demo</span>
+            </div>
+          </div>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider text-brand-ink2 mb-3">Secondary &middot; cyan</p>
+            <div class="flex gap-3 flex-wrap items-center">
+              <span class="btn btn-secondary">Read the API docs</span>
+              <span class="btn btn-secondary text-sm">Get a demo</span>
+            </div>
+          </div>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider text-brand-ink2 mb-3">Ghost &middot; blue outline</p>
+            <div class="flex gap-3 flex-wrap items-center">
+              <span class="btn btn-ghost">Sign in</span>
+              <span class="btn btn-ghost">Book a demo</span>
+              <span class="btn btn-ghost-light" style="background: var(--tu-blue); color: white;">Used on cyan hero</span>
+            </div>
+          </div>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider text-brand-ink2 mb-3">Subnav pills</p>
+            <div class="otp-rail" style="display: inline-flex;">
+              <span class="otp-rail-link is-active">Overview</span>
+              <span class="otp-rail-link">Features</span>
+              <span class="otp-rail-link">How it works</span>
+            </div>
+          </div>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider text-brand-ink2 mb-3">Category chips (group identity)</p>
+            <div class="flex gap-6 flex-wrap items-center text-sm">
+              <span class="inline-flex items-center gap-2"><span class="cat cat-cyan"></span> Application delivery</span>
+              <span class="inline-flex items-center gap-2"><span class="cat cat-mint"></span> DNS services</span>
+              <span class="inline-flex items-center gap-2"><span class="cat cat-coral"></span> Network &amp; security</span>
+              <span class="inline-flex items-center gap-2"><span class="cat cat-blue"></span> Company / Resources</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

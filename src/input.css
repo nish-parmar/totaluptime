@@ -1,0 +1,187 @@
+/* ---------------------------------------------------------------------
+ * Total Uptime — compiled stylesheet entrypoint.
+ *
+ * Built with the Tailwind CLI:
+ *   npm run build   → minified one-off compile
+ *   npm run dev     → watch mode while editing HTML
+ *
+ * Output lands at /dist/tailwind.css and is the single CSS file each
+ * page references. Brand tokens are defined in tailwind.config.js;
+ * component classes live in the @layer components block below.
+ * ------------------------------------------------------------------ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =====================================================================
+ * BASE — semantic defaults
+ * ================================================================== */
+@layer base {
+  :root {
+    --tu-cyan:   #01ADEF;
+    --tu-cyan-2: #0192C7;
+    --tu-blue:   #144586;
+    --tu-blue-9: #0E2F5C;
+    --tu-mint:   #5CC4A8;
+    --tu-coral:  #ff5a6e;
+    --tu-coral-2:#e63f55;
+    --tu-sky:    #DFEAF2;
+    --tu-sky-2:  #F2F7FB;
+    --tu-ink:    #202020;
+    --tu-ink-2:  #4A5562;
+    --tu-line:   #E4ECF3;
+    --tu-radius: 12px;
+  }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+  body {
+    font-family: 'Montserrat', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    color: var(--tu-ink);
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  [x-cloak] { display: none !important; }
+}
+
+/* =====================================================================
+ * COMPONENTS — brand components reused across pages
+ * ================================================================== */
+@layer components {
+
+  /* Skip link */
+  .skip-link {
+    @apply absolute -left-[9999px] top-0 z-[100] py-3 px-4 bg-brand-blue text-white;
+    border-radius: 0 0 .5rem 0;
+  }
+  .skip-link:focus { @apply left-0; }
+
+  /* ---------- Buttons (pill, brand) ---------- */
+  .btn {
+    @apply inline-flex items-center gap-2 font-bold text-[15px] px-5 py-2.5 rounded-full transition-colors whitespace-nowrap leading-tight;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary       { @apply bg-brand-coral text-white hover:bg-brand-coral2; }
+  .btn-secondary     { @apply bg-brand-cyan text-white hover:bg-brand-cyan2; }
+  .btn-ghost         { @apply bg-transparent text-brand-blue border-[1.5px] border-brand-blue hover:bg-brand-blue hover:text-white; }
+  .btn-ghost-light   { @apply bg-transparent text-white border-[1.5px] border-white/60 hover:bg-white/10; }
+
+  /* ---------- Category chips ---------- */
+  .cat       { @apply inline-block w-2.5 h-2.5 rounded-[3px] flex-shrink-0; }
+  .cat-cyan  { @apply bg-brand-cyan; }
+  .cat-mint  { @apply bg-brand-mint; }
+  .cat-coral { @apply bg-brand-coral; }
+  .cat-blue  { @apply bg-brand-blue; }
+
+  /* ---------- Eyebrow label ----------
+   * Default is brand-blue (AAA on white).
+   * Use .eyebrow-cyan only on deep blue surfaces (passes AA on blue/blue9).
+   * .eyebrow-blue retained as an explicit alias for clarity in markup.
+   */
+  .eyebrow      { @apply text-[11px] font-bold tracking-[.12em] uppercase text-brand-blue; }
+  .eyebrow-blue { @apply text-brand-blue; }
+  .eyebrow-cyan { @apply text-brand-cyan; }
+
+  /* ---------- Headings ---------- */
+  .h-display { @apply font-extrabold text-brand-blue leading-[1.05] tracking-tight; }
+  .h-section { @apply font-extrabold text-brand-blue leading-[1.1] tracking-tight; }
+  .h-card    { @apply font-bold text-brand-blue; }
+
+  /* ---------- Surfaces ---------- */
+  .surface-sky      { @apply bg-brand-sky; }
+  .surface-sky-soft { @apply bg-brand-sky2; }
+  .surface-cyan     { @apply bg-brand-cyan text-white; }
+  .surface-blue     { @apply bg-brand-blue text-white; }
+
+  /* ---------- Cards ---------- */
+  .tile           { @apply bg-white border border-brand-line rounded-xl p-5 pb-[1.375rem]; }
+  .tile-top       { border-top: 3px solid var(--tu-cyan); }
+  .tile-top-mint  { border-top-color: var(--tu-mint); }
+  .tile-top-coral { border-top-color: var(--tu-coral); }
+  .tile-top-blue  { border-top-color: var(--tu-blue); }
+
+  /* ---------- Hairline divider ---------- */
+  .hairline { @apply border-t border-brand-line; }
+
+  /* ---------- Nav link ---------- */
+  .nav-link { @apply text-brand-ink font-medium px-3 py-2 rounded-md transition-colors; }
+  .nav-link:hover,
+  .nav-link[aria-expanded="true"] { @apply text-brand-cyan bg-brand-sky2; }
+
+  /* ---------- Mega menu ---------- */
+  .mega {
+    @apply absolute top-full bg-white border border-brand-line p-5 z-[60];
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: .5rem;
+    min-width: 640px;
+    border-radius: 16px;
+  }
+
+  /* ---------- Footer ---------- */
+  .footer-link { color: rgba(255,255,255,.85); }
+  .footer-link:hover { color: #fff; text-decoration: underline; }
+
+  /* ---------- Cloud-provider trust logos ----------
+   * Muted greyscale by default so the strip reads as one calm band;
+   * full brand colour on hover for recognition.
+   */
+  .cloud-logo {
+    /* max-w cap is defence-in-depth: some logo CDNs serve SVGs with no
+     * intrinsic width/height (e.g. simple-icons), which would otherwise
+     * fall back to the browser's 300px default and blow out the grid.
+     */
+    @apply h-10 w-auto max-w-[110px] object-contain;
+    filter: grayscale(100%) contrast(.9);
+    opacity: .65;
+    transition: filter .2s ease, opacity .2s ease;
+  }
+  .cloud-logo:hover,
+  .cloud-logo:focus { filter: none; opacity: 1; }
+
+  /* ---------- "On this page" — mobile fix ---------- */
+  .otp-fab {
+    @apply fixed right-4 bottom-4 z-[45] bg-brand-blue text-white font-bold text-[13px] py-3 px-4 rounded-full inline-flex items-center gap-2 border-0 cursor-pointer;
+  }
+  .otp-fab:focus-visible { outline: 2px solid var(--tu-cyan); outline-offset: 2px; }
+  .otp-fab .otp-caret { transition: transform .2s ease; }
+  .otp-fab[aria-expanded="true"] .otp-caret { transform: rotate(180deg); }
+
+  .otp-sheet-backdrop { @apply fixed inset-0 z-50; background: rgba(20,69,134,.45); }
+  .otp-sheet          { @apply fixed left-0 right-0 bottom-0 z-[51] bg-white px-4 pt-4 pb-5; border-top-left-radius: 18px; border-top-right-radius: 18px; max-height: 80vh; overflow-y: auto; }
+  .otp-grab           { @apply mx-auto mb-3; width: 36px; height: 4px; background: var(--tu-line); border-radius: 4px; }
+  .otp-item           { @apply flex items-center justify-between py-3.5 px-3 rounded-[10px] text-brand-ink font-medium text-[15px]; }
+  .otp-item + .otp-item { @apply border-t border-brand-line; }
+  .otp-item.is-active { @apply bg-brand-cyan text-white font-bold; }
+
+  /* Desktop in-page nav — sticky pill row */
+  .otp-rail {
+    @apply flex items-center gap-1 flex-wrap py-2 px-3 border border-brand-line rounded-full;
+    background: rgba(255,255,255,.95);
+    backdrop-filter: blur(8px);
+  }
+  .otp-rail-link  { @apply text-brand-ink2 font-semibold text-[13px] py-1.5 px-3 rounded-full; }
+  .otp-rail-link:hover     { @apply text-brand-blue bg-brand-sky2; }
+  .otp-rail-link.is-active { @apply bg-brand-cyan text-white; }
+
+  /* Comparison table */
+  .cmp { width: 100%; border-collapse: separate; border-spacing: 0; }
+  .cmp th, .cmp td { @apply py-3.5 px-4 text-left text-sm border-b border-brand-line; }
+  .cmp thead th { @apply bg-brand-sky text-brand-blue font-bold; }
+  .cmp thead th:first-child { border-top-left-radius: 10px; }
+  .cmp thead th:last-child  { border-top-right-radius: 10px; }
+  .cmp td.tu     { background: rgba(1,173,239,.05); @apply font-semibold text-brand-blue; }
+  .cmp .check    { @apply text-brand-mint font-extrabold; }
+  .cmp .cross    { color: #C0C7D1; @apply font-bold; }
+  .cmp .meh      { @apply text-brand-ink2 text-xs; }
+}
+
+/* =====================================================================
+ * REDUCED MOTION
+ * ================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
